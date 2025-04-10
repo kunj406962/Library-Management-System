@@ -14,6 +14,7 @@ namespace CPRG211FinalProject.Classes
         public string Author { get; set; }
         public int Quantity { get; set; }
 
+        public Book() { }
         public Book(string bookId, string title, string genre, string author, int quantity)
         {
             BookId = bookId;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoreData;
 using Dapper;
 using MySqlConnector;
 
@@ -26,7 +27,10 @@ namespace CPRG211FinalProject.Classes
         //Build Connection
         private static MySqlConnection connection= new MySqlConnection(builder.ConnectionString);
 
-        private static void CreateAndPopulate() 
+        /// <summary>
+        /// Creates all Database Tables if this is the first time the program is run
+        /// </summary>
+        private static void CreateTabless() 
         {
             string createTableBook =
                 @"CREATE TABLE IF NOT EXISTS book (
@@ -34,28 +38,109 @@ namespace CPRG211FinalProject.Classes
                 Title VARCHAR(255) NOT NULL,
                 Genre VARCHAR(255),
                 Author VARCHAR(255) NOT NULL,
-                Quantity NUMBER);" +
-                @"CREATE TABLE IF NOT EXISTS customer (
+                Quantity INT);
+                CREATE TABLE IF NOT EXISTS customer (
                 CustomerId VARCHAR(36) PRIMARY KEY,
                 FirstName VARCHAR(255) NOT NULL,
                 LastName VARCHAR(255),
                 Email VARCHAR(255),
-                Phone NUMBER);" +
-                @"CREATE TABLE IF NOT EXISTS borrow (
+                Phone VARCHAR(10);
+                CREATE TABLE IF NOT EXISTS borrow (
                 BorrowId VARCHAR(36) PRIMARY KEY,
                 CustomerId VARCHAR(36) NOT NULL,
                 BookId VARCHAR(36) NOT NULL,
                 Quantity INT,
                 Returned VARCHAR(3),
                 CONSTRAINT customerid_fk FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId),
-                CONSTRAINT bookid_fk FOREIGN KEY (BookId) REFERENCES book(BookId)
-                );"; ;
+                CONSTRAINT bookid_fk FOREIGN KEY (BookId) REFERENCES book(BookId));"; 
             connection.Open();
             connection.Execute(createTableBook);
             connection.Close();
             
 
         }
+
+        /// <summary>
+        /// Gets all books
+        /// </summary>
+        /// <returns></returns>
+        public static List<Book> GetAllBooks() 
+        {
+            List<Book> list = new List<Book>();
+            Book book=new Book(); 
+            string query = "SELECT * FROM book;";
+            MySqlCommand cmd = new MySqlCommand(query,connection);
+            connection.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader()) 
+            {
+                while (reader.Read()) 
+                {
+                    book.BookId = reader.GetString(0);
+                    book.Title = reader.GetString(1);
+                    book.Genre = reader.GetString(2);
+                    book.Author = reader.GetString(3);
+                    book.Quantity = reader.GetInt32(4);
+                    list.Add(book);
+                }
+            }
+            connection.Close() ;
+            return list;
+        }
+
+        /// <summary>
+        /// Implement the UpdateBook method to update a book in the database
+        /// </summary>
+        /// <param name="book"></param>
+        public static void UpdateBook(Book book)
+        {
+            connection.Open();
+            string sqlQuery = $"UPDATE books SET Title='{book.Title}', Author= '{book.Author}',  Genre='{book.Genre}', Quantity='{book.Quantity}', WHERE BookId='{book.BookId}'";
+            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
+            int execute = command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        /// <summary>
+        /// Implement the GetBook method to get a book from the database
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        public static Book GetBook(string bookId)
+        {
+            string sqlQuery = $"SELECT * FROM books WHERE BOOKID='{bookId}'";
+            Book book = new Book();
+            MySqlCommand read = new MySqlCommand(sqlQuery, connection);
+            connection.Open();
+            using (MySqlDataReader reader = read.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    book.BookId = reader.GetString(0);
+                    book.Title = reader.GetString(1);
+                    book.Genre = reader.GetString(2);
+                    book.Author = reader.GetString(3);
+                    book.Quantity = reader.GetInt32(4);
+                }
+            }
+            connection.Close();
+            return book;
+
+        }
+
+
+        /// <summary>
+        /// Implement the DeleteBook method to delete a book from the database
+        /// </summary>
+        /// <param name="bookId"></param>
+        public static void DeleteBook(string bookId)
+        {
+            connection.Open();
+            string sqlQuery = $"DELETE FROM books WHERE BookId='{bookId}'";
+            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
+            int execute = command.ExecuteNonQuery();
+            connection.Close();
+        }
+
 
 
 
