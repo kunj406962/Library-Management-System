@@ -67,7 +67,6 @@ namespace CPRG211FinalProject.Classes
         public static List<Book> GetAllBooks() 
         {
             List<Book> list = new List<Book>();
-            Book book=new Book(); 
             string query = "SELECT * FROM book;";
             MySqlCommand cmd = new MySqlCommand(query,connection);
             connection.Open();
@@ -75,6 +74,7 @@ namespace CPRG211FinalProject.Classes
             {
                 while (reader.Read()) 
                 {
+                    Book book = new Book();
                     book.BookId = reader.GetString(0);
                     book.Title = reader.GetString(1);
                     book.Genre = reader.GetString(2);

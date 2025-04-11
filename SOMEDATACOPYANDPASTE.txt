@@ -12,24 +12,24 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insert sample books
 INSERT INTO book (BookId, Title, Genre, Author, Quantity) VALUES
-('B001', 'The Great Gatsby', 'Classic', 'F. Scott Fitzgerald', 5),
-('B002', 'To Kill a Mockingbird', 'Fiction', 'Harper Lee', 3),
-('B003', '1984', 'Dystopian', 'George Orwell', 7),
-('B004', 'Pride and Prejudice', 'Romance', 'Jane Austen', 4),
-('B005', 'The Hobbit', 'Fantasy', 'J.R.R. Tolkien', 6);
+('B1', 'The Great Gatsby', 'Classic', 'F. Scott Fitzgerald', 5),
+('B2', 'To Kill a Mockingbird', 'Fiction', 'Harper Lee', 3),
+('B3', '1984', 'Dystopian', 'George Orwell', 7),
+('B4', 'Pride and Prejudice', 'Romance', 'Jane Austen', 4),
+('B5', 'The Hobbit', 'Fantasy', 'J.R.R. Tolkien', 6);
 
 -- Insert sample customers
 INSERT INTO customer (CustomerId, FirstName, LastName, Email, Phone) VALUES
-('C001', 'John', 'Smith', 'john.smith@email.com', '555-123-4567'),
-('C002', 'Emily', 'Johnson', 'emily.j@email.com', '555-987-6543'),
-('C003', 'Michael', 'Williams', 'michael.w@email.com', '555-456-7890'),
-('C004', 'Sarah', 'Brown', 'sarah.b@email.com', '555-789-0123'),
-('C005', 'David', 'Jones', 'david.j@email.com', '555-234-5678');
+('C1', 'John', 'Smith', 'john.smith@email.com', '555-123-4567'),
+('C2', 'Emily', 'Johnson', 'emily.j@email.com', '555-987-6543'),
+('C3', 'Michael', 'Williams', 'michael.w@email.com', '555-456-7890'),
+('C4', 'Sarah', 'Brown', 'sarah.b@email.com', '555-789-0123'),
+('C5', 'David', 'Jones', 'david.j@email.com', '555-234-5678');
 
 -- Insert sample borrow records
 INSERT INTO borrow (BorrowId, CustomerId, BookId, Quantity, Returned) VALUES
-('BR001', 'C001', 'B001', 1, 'NO'),
-('BR002', 'C002', 'B003', 1, 'YES'),
-('BR003', 'C003', 'B002', 2, 'NO'),
-('BR004', 'C004', 'B005', 1, 'NO'),
-('BR005', 'C005', 'B004', 1, 'YES');
+('BR1', 'C1', 'B1', 1, 'NO'),
+('BR2', 'C2', 'B3', 1, 'YES'),
+('BR3', 'C3', 'B2', 2, 'NO'),
+('BR4', 'C4', 'B5', 1, 'NO'),
+('BR5', 'C5', 'B4', 1, 'YES');

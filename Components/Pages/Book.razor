@@ -9,10 +9,11 @@
             <th>Author</th>
             <th>Genre</th>
             <th>Quantity</th>
+            <th>Action</th>
         </tr>
     </thead>
-    @* <tbody>
-        @foreach (Book book in books)
+    <tbody>
+        @foreach (CPRG211FinalProject.Classes.Book book in books)
         {
                 <tr>
                     <td>@book.BookId</td>
@@ -20,11 +21,17 @@
                     <td>@book.Author</td>
                     <td>@book.Genre</td>
                     <td>@book.Quantity</td>
+                    <td class="text-center">
+                        <button class="btn btn-info" >View book</button>
+                        <button class="btn btn-warning" >Edit</button>
+                        <button class="btn btn-danger" >Delete</button>
+                    </td>
                 </tr>
         } 
-    </tbody> *@
+    </tbody>
 </table>
 
 
 @code {
+    List<CPRG211FinalProject.Classes.Book> books = DatabaseManager.GetAllBooks(); 
 }
