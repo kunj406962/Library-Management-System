@@ -88,13 +88,28 @@ namespace CPRG211FinalProject.Classes
         }
 
         /// <summary>
+        /// Implement the AddBook method to add a book to the database
+        /// </summary>
+        /// <param name="book"></param>
+        public static void AddBook(Book book)
+        {
+            connection.Open();
+            string insertSql = "INSERT INTO books (BookId, Title, Author, Genre, Quantity) VALUES" +
+                              $"('{book.BookId}','{book.Title}','{book.Author}','{book.Genre}',{book.Quantity});";
+            MySqlCommand cmd = new MySqlCommand(insertSql, connection);
+            int execute = cmd.ExecuteNonQuery();
+            connection.Close();
+
+        }
+
+        /// <summary>
         /// Implement the UpdateBook method to update a book in the database
         /// </summary>
         /// <param name="book"></param>
         public static void UpdateBook(Book book)
         {
             connection.Open();
-            string sqlQuery = $"UPDATE books SET Title='{book.Title}', Author= '{book.Author}',  Genre='{book.Genre}', Quantity='{book.Quantity}', WHERE BookId='{book.BookId}'";
+            string sqlQuery = $"UPDATE books SET Title='{book.Title}', Author= '{book.Author}',  Genre='{book.Genre}', Quantity={book.Quantity}, WHERE BookId='{book.BookId}'";
             MySqlCommand command = new MySqlCommand(sqlQuery, connection);
             int execute = command.ExecuteNonQuery();
             connection.Close();

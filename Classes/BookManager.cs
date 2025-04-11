@@ -6,7 +6,63 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    internal class BookManager
+    internal  class BookManager
     {
+        private List<Book> Books {  get; set; }
+        public BookManager() { Books= DatabaseManager.GetAllBooks();}
+
+        /// <summary>
+        /// Creates a book object and adds it to the list as well as the datbase
+        /// </summary>
+        /// <param name="title">Title of new book</param>
+        /// <param name="author">Author of new book</param>
+        /// <param name="genre">Genre of new book</param>
+        /// <param name="quatity">Quantity of new book</param>
+        public void CreateBook(string title, string author, string genre, int quatity)
+        {
+            Book book = new Book();
+            string lastCode=Books.LastOrDefault()!.BookId;
+            int lastCodeNum=Convert.ToInt32(lastCode.Substring(1));
+            string newCode = $"B{lastCodeNum++}";
+            book.BookId=newCode;
+            book.Title=title;
+            book.Author=author;
+            book.Genre=genre;
+            book.Quantity=quatity;
+            Books.Add(book);
+            DatabaseManager.AddBook(book);
+        }
+
+        /// <summary>
+        /// Updates a book object both in the list and the database
+        /// </summary>
+        /// <param name="book">Book object with same Id </param>
+        public void UpdateBook(Book book) 
+        {
+           foreach(Book book1 in Books) 
+           {
+                if (book1.BookId == book.BookId)
+                {
+                    book1.Title = book.Title;
+                    book1.Author = book.Author;
+                    book1.Genre = book.Genre;
+                    book1.Quantity = book.Quantity;
+                    DatabaseManager.UpdateBook(book);
+                    return;
+                }
+           }
+        }
+
+        /// <summary>
+        /// Deletse book from both the list and the database
+        /// </summary>
+        /// <param name="book"></param>
+        public void DeleteBook(Book book) 
+        {
+            Books.Remove(book);
+            DatabaseManager.DeleteBook(book.BookId);
+        }
+
+       
     }
 }
