@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    internal class Book
+    public class Book
     {
         public string BookId { get; set; }
         public string Title { get; set; }

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    internal  class BookManager
+    public  static class BookManager
     {
-        private List<Book> Books {  get; set; }
-        public BookManager() { Books= DatabaseManager.GetAllBooks();}
+        public static List<Book> Books= DatabaseManager.GetAllBooks();
 
         /// <summary>
         /// Creates a book object and adds it to the list as well as the datbase
@@ -18,7 +17,7 @@ namespace CPRG211FinalProject.Classes
         /// <param name="author">Author of new book</param>
         /// <param name="genre">Genre of new book</param>
         /// <param name="quatity">Quantity of new book</param>
-        public void CreateBook(string title, string author, string genre, int quatity)
+        public static void CreateBook(string title, string author, string genre, int quatity)
         {
             Book book = new Book();
             string lastCode=Books.LastOrDefault()!.BookId;
@@ -37,7 +36,7 @@ namespace CPRG211FinalProject.Classes
         /// Updates a book object both in the list and the database
         /// </summary>
         /// <param name="book">Book object with same Id </param>
-        public void UpdateBook(Book book) 
+        public static void UpdateBook(Book book) 
         {
            foreach(Book book1 in Books) 
            {
@@ -57,7 +56,7 @@ namespace CPRG211FinalProject.Classes
         /// Deletse book from both the list and the database
         /// </summary>
         /// <param name="book"></param>
-        public void DeleteBook(Book book) 
+        public static void DeleteBook(Book book) 
         {
             Books.Remove(book);
             DatabaseManager.DeleteBook(book.BookId);

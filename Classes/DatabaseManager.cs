@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CoreData;
+//using CoreData;
 using Dapper;
 using MySqlConnector;
 
 namespace CPRG211FinalProject.Classes
 {
-    internal static class DatabaseManager
+    public static class DatabaseManager
     {
         private static MySqlConnectionStringBuilder builder =
         new MySqlConnectionStringBuilder
