@@ -44,7 +44,7 @@ namespace CPRG211FinalProject.Classes
                 FirstName VARCHAR(255) NOT NULL,
                 LastName VARCHAR(255),
                 Email VARCHAR(255),
-                Phone VARCHAR(10);
+                Phone VARCHAR(12);
                 CREATE TABLE IF NOT EXISTS borrow (
                 BorrowId VARCHAR(36) PRIMARY KEY,
                 CustomerId VARCHAR(36) NOT NULL,
