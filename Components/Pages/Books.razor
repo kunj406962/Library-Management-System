@@ -1,4 +1,4 @@
-﻿@page "/book"
+﻿@page "/books"
 
 <header class="d-flex justify-content-between my-4">
     <h1>Book Management</h1>
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (CPRG211FinalProject.Classes.Book book in books)
+        @foreach (Book book in books)
         {
                 <tr>
                     <td>@book.BookId</td>
@@ -37,5 +37,5 @@
 
 
 @code {
-    List<CPRG211FinalProject.Classes.Book> books = DatabaseManager.GetAllBooks(); 
+    List<Book> books = DatabaseManager.GetAllBooks(); 
 }
