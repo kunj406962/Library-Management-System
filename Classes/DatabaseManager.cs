@@ -44,7 +44,7 @@ namespace CPRG211FinalProject.Classes
                 FirstName VARCHAR(255) NOT NULL,
                 LastName VARCHAR(255),
                 Email VARCHAR(255),
-                Phone VARCHAR(10);
+                Phone VARCHAR(12);
                 CREATE TABLE IF NOT EXISTS borrow (
                 BorrowId VARCHAR(36) PRIMARY KEY,
                 CustomerId VARCHAR(36) NOT NULL,
@@ -156,7 +156,55 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        public static List<Customer> GetAllCustomers()
+        {
+            connection.Open();
+            List<Customer> customers = new List<Customer>();
+            string sql = "select * from customer;";
 
+            MySqlCommand command = new MySqlCommand(sql,connection);
+            using(MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Customer customer = new Customer
+                    {
+                        CustomerID = reader.GetString(0),
+                        FirstName = reader.GetString(0),
+                        LastName = reader.GetString(0),
+                        Email = reader.GetString(0),
+                        Phone = reader.GetString(0)
+                    };
+                    customers.Add(customer);
+                }
+            }
+            connection.Close();
+            return customers;
+        }
+
+        public static Customer GetCustomer(string id)
+        {
+            connection.Open();
+            Customer customer = new Customer();
+            string sql = $"select * from customer where customer_id = '{id}'; ";
+            MySqlCommand command = new MySqlCommand(sql,connection);
+            using( MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    customer = new Customer
+                    {
+                        CustomerID = reader.GetString(0),
+                        FirstName = reader.GetString(0),
+                        LastName = reader.GetString(0),
+                        Email = reader.GetString(0),
+                        Phone = reader.GetString(0)
+                    };
+                }
+            }
+            connection.Close();
+            return customer;
+        }
 
 
     }
