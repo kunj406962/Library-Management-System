@@ -22,7 +22,7 @@ namespace CPRG211FinalProject.Classes
             Book book = new Book();
             string lastCode=Books.LastOrDefault()!.BookId;
             int lastCodeNum=Convert.ToInt32(lastCode.Substring(1));
-            string newCode = $"B{lastCodeNum++}";
+            string newCode = $"B{lastCodeNum+1}";
             book.BookId=newCode;
             book.Title=title;
             book.Author=author;

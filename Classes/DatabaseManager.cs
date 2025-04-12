@@ -94,7 +94,7 @@ namespace CPRG211FinalProject.Classes
         public static void AddBook(Book book)
         {
             connection.Open();
-            string insertSql = "INSERT INTO books (BookId, Title, Author, Genre, Quantity) VALUES" +
+            string insertSql = "INSERT INTO book (BookId, Title, Author, Genre, Quantity) VALUES" +
                               $"('{book.BookId}','{book.Title}','{book.Author}','{book.Genre}',{book.Quantity});";
             MySqlCommand cmd = new MySqlCommand(insertSql, connection);
             int execute = cmd.ExecuteNonQuery();
