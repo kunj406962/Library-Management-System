@@ -9,7 +9,7 @@ using MySqlConnector;
 
 namespace CPRG211FinalProject.Classes
 {
-    public static class DatabaseManager
+    public class DatabaseManager
     {
         private static MySqlConnectionStringBuilder builder =
         new MySqlConnectionStringBuilder
@@ -28,9 +28,9 @@ namespace CPRG211FinalProject.Classes
         private static MySqlConnection connection= new MySqlConnection(builder.ConnectionString);
 
         /// <summary>
-        /// Creates all Database Tables if this is the first time the program is run
+        /// Istantiate this on the home page so it runs this
         /// </summary>
-        private static void CreateTabless() 
+        public DatabaseManager() 
         {
             string createTableBook =
                 @"CREATE TABLE IF NOT EXISTS book (
@@ -44,7 +44,7 @@ namespace CPRG211FinalProject.Classes
                 FirstName VARCHAR(255) NOT NULL,
                 LastName VARCHAR(255),
                 Email VARCHAR(255),
-                Phone VARCHAR(12);
+                Phone VARCHAR(12));
                 CREATE TABLE IF NOT EXISTS borrow (
                 BorrowId VARCHAR(36) PRIMARY KEY,
                 CustomerId VARCHAR(36) NOT NULL,
@@ -52,12 +52,13 @@ namespace CPRG211FinalProject.Classes
                 Quantity INT,
                 Returned VARCHAR(3),
                 CONSTRAINT customerid_fk FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId),
-                CONSTRAINT bookid_fk FOREIGN KEY (BookId) REFERENCES book(BookId));"; 
+                CONSTRAINT bookid_fk FOREIGN KEY (BookId) REFERENCES book(BookId));";
             connection.Open();
             connection.Execute(createTableBook);
             connection.Close();
-            
 
+
+        
         }
 
         /// <summary>

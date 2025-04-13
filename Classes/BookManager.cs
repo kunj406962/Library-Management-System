@@ -11,7 +11,7 @@ namespace CPRG211FinalProject.Classes
         public static List<Book> Books= DatabaseManager.GetAllBooks();
 
         /// <summary>
-        /// Creates a book object and adds it to the list as well as the datbase
+        /// Creates a book object and adds it to the list as well as the database
         /// </summary>
         /// <param name="title">Title of new book</param>
         /// <param name="author">Author of new book</param>
@@ -20,16 +20,30 @@ namespace CPRG211FinalProject.Classes
         public static void CreateBook(string title, string author, string genre, int quatity)
         {
             Book book = new Book();
-            string lastCode=Books.LastOrDefault()!.BookId;
-            int lastCodeNum=Convert.ToInt32(lastCode.Substring(1));
-            string newCode = $"B{lastCodeNum+1}";
-            book.BookId=newCode;
-            book.Title=title;
-            book.Author=author;
-            book.Genre=genre;
-            book.Quantity=quatity;
-            Books.Add(book);
-            DatabaseManager.AddBook(book);
+            if (Books.Count == 0)
+            {
+                book.BookId = "B1";
+                book.Title = title;
+                book.Author = author;
+                book.Genre = genre;
+                book.Quantity = quatity;
+                Books.Add(book);
+                DatabaseManager.AddBook(book);
+            }
+            else
+            {
+
+                string lastCode = Books.LastOrDefault()!.BookId;
+                int lastCodeNum = Convert.ToInt32(lastCode.Substring(1));
+                string newCode = $"B{lastCodeNum + 1}";
+                book.BookId = newCode;
+                book.Title = title;
+                book.Author = author;
+                book.Genre = genre;
+                book.Quantity = quatity;
+                Books.Add(book);
+                DatabaseManager.AddBook(book);
+            }
         }
 
         /// <summary>
