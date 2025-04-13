@@ -1,0 +1,105 @@
+﻿@page "/editbook/{BookId}"
+
+<h1>Edit the Book: @book.BookId</h1>
+
+<div>
+	<div class="form-group">
+		<label>Book Title: </label>
+		<input type="text" class="form-control" placeholder="Update Title" @bind="book.Title" />
+	</div>
+
+	<div class="form-group">
+		<label>Author: </label>
+		<input type="text" class="form-control" placeholder="Update Author" @bind="book.Author" />
+	</div>
+
+	<div class="form-group">
+		<label>Genre: </label>
+		<input type="text" class="form-control" placeholder="Update Genre" @bind="book.Genre" />
+	</div>
+
+	<div class="form-group">
+		<label>Quantity: </label>
+		<input type="text" class="form-control" placeholder="Update Quantity: must be number" @bind="quantity">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="UpdateBook">Update Book Details</button>
+	</div>
+
+</div>
+
+@code {
+	// used to navigate back to the Home page
+	[Inject] NavigationManager NavigationManager { get; set; }
+	private Book book = new Book();
+	private string quantity;
+
+	[Parameter] 
+	public string BookId { get; set; } // parameter for the book id
+
+
+	/// <summary>
+	/// Checks idf quantity entered is a positive number
+	/// </summary>
+	/// <returns></returns>
+	/// <exception cref="Exception">Checks if the integer input is positive and whole</exception>
+
+	private int CheckQuantity()
+	{
+		int intQuantity;
+		if (Int32.TryParse(quantity, out intQuantity))
+		{
+			if (intQuantity >= 0)
+			{
+				return intQuantity;
+			}
+			else
+			{
+				throw new Exception("Quantity must be a positive integer");
+			}
+		}
+		else
+		{
+			throw new Exception("Quantity must be a whole number");
+		}
+
+	}
+
+	protected override void OnInitialized()
+	{
+		// Get the book from the database using the BookId
+		// Uncomment once the GetBook method is implemented in the BookDbAccessor class
+		book = DatabaseManager.GetBook(BookId);
+		quantity = Convert.ToString(book.Quantity);
+	}
+
+	/// <summary>
+	/// Updates the book values based on the inputs from the user
+	/// </summary>
+	/// <returns></returns>
+	private async Task UpdateBook()
+	{
+		try
+		{
+			// update the values of the book
+			// book.Title = title;
+			// book.Author = author;
+			// book.Genre = genre;
+			// book.Quantity = Convert.ToInt32(quantity);
+			book.Quantity = CheckQuantity();
+			BookManager.UpdateBook(book);
+
+			// display alert for update success
+			await App.Current.MainPage.DisplayAlert($"Success", $"Book information has been updated", "OK");
+
+			// navigate to the books page
+			NavigationManager.NavigateTo("/books");
+		}
+		catch (Exception ex)
+		{
+			await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
+		}
+	}
+
+	
+}

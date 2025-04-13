@@ -39,12 +39,14 @@ namespace CPRG211FinalProject.Classes
                 Genre VARCHAR(255),
                 Author VARCHAR(255) NOT NULL,
                 Quantity INT);
+
                 CREATE TABLE IF NOT EXISTS customer (
                 CustomerId VARCHAR(36) PRIMARY KEY,
                 FirstName VARCHAR(255) NOT NULL,
                 LastName VARCHAR(255),
                 Email VARCHAR(255),
                 Phone VARCHAR(12);
+
                 CREATE TABLE IF NOT EXISTS borrow (
                 BorrowId VARCHAR(36) PRIMARY KEY,
                 CustomerId VARCHAR(36) NOT NULL,
@@ -109,7 +111,7 @@ namespace CPRG211FinalProject.Classes
         public static void UpdateBook(Book book)
         {
             connection.Open();
-            string sqlQuery = $"UPDATE books SET Title='{book.Title}', Author= '{book.Author}',  Genre='{book.Genre}', Quantity={book.Quantity}, WHERE BookId='{book.BookId}'";
+            string sqlQuery = $"UPDATE book SET Title='{book.Title}',Author='{book.Author}', Genre='{book.Genre}', Quantity='{book.Quantity}' WHERE BookId='{book.BookId}'";
             MySqlCommand command = new MySqlCommand(sqlQuery, connection);
             int execute = command.ExecuteNonQuery();
             connection.Close();
@@ -122,7 +124,7 @@ namespace CPRG211FinalProject.Classes
         /// <returns></returns>
         public static Book GetBook(string bookId)
         {
-            string sqlQuery = $"SELECT * FROM books WHERE BOOKID='{bookId}'";
+            string sqlQuery = $"SELECT * FROM book WHERE BOOKID='{bookId}'";
             Book book = new Book();
             MySqlCommand read = new MySqlCommand(sqlQuery, connection);
             connection.Open();
@@ -150,7 +152,7 @@ namespace CPRG211FinalProject.Classes
         public static void DeleteBook(string bookId)
         {
             connection.Open();
-            string sqlQuery = $"DELETE FROM books WHERE BookId='{bookId}'";
+            string sqlQuery = $"DELETE FROM book WHERE BookId='{bookId}'";
             MySqlCommand command = new MySqlCommand(sqlQuery, connection);
             int execute = command.ExecuteNonQuery();
             connection.Close();

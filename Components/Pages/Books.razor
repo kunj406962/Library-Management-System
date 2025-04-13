@@ -1,4 +1,5 @@
 ﻿@page "/books"
+@inject NavigationManager NavigationManager
 
 <header class="d-flex justify-content-between my-4">
     <h1>Book Management</h1>
@@ -20,17 +21,17 @@
     <tbody>
         @foreach (Book book in books)
         {
-                <tr>
-                    <td>@book.BookId</td>
-                    <td>@book.Title</td>
-                    <td>@book.Author</td>
-                    <td>@book.Genre</td>
-                    <td>@book.Quantity</td>
-                    <td class="text-center">
-                        <button class="btn btn-warning" >Edit</button>
-                        <button class="btn btn-danger" >Delete</button>
-                    </td>
-                </tr>
+            <tr>
+                <td>@book.BookId</td>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Genre</td>
+                <td>@book.Quantity</td>
+                <td class="text-center">
+                    <button class="btn btn-primary" @onclick="() => EditBook(book)">Edit</button>
+                    <button class="btn btn-danger" >Delete</button>
+                </td>
+            </tr>
         } 
     </tbody>
 </table>
@@ -38,4 +39,9 @@
 
 @code {
     List<Book> books = DatabaseManager.GetAllBooks(); 
+
+    private void EditBook(Book book)
+    {
+        NavigationManager.NavigateTo($"/editbook/{book.BookId}");
+    }
 }
