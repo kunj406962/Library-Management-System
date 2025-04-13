@@ -1,7 +1,46 @@
 ﻿@page "/addcustomer"
+@using CPRG211FinalProject.Classes;
 
-<h3>AddCustomerForm</h3>
+<h1>Add A New Customer in the Library</h1>
+<div>
+	<div class="form-group">
+		<label>First Name: </label>
+		<input type="text" class="form-control" placeholder="Enter First Name" @bind="customer.FirstName" />
+	</div>
+
+	<div class="form-group">
+		<label>Last Name: </label>
+		<input type="text" class="form-control" placeholder="Enter Last Name" @bind="customer.LastName" />
+	</div>
+
+	<div class="form-group">
+		<label>Email: </label>
+		<input type="text" class="form-control" placeholder="Enter Email" @bind="customer.Email" />
+	</div>
+
+	<div class="form-group">
+		<label>Phone Number: </label>
+		<input type="text" class="form-control" placeholder="Enter Phone Number" @bind="customer.Phone">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="AddCustomer">Add Customer</button>
+	</div>
+
+</div>
 
 @code {
+	[Inject] NavigationManager NavigationManager { get; set; }
+	Customer customer = new Customer { CustomerID = MakeId() };
 
+	public async Task AddCustomer()
+	{
+		DatabaseManager.AddCustomer(customer);
+		await App.Current.MainPage.DisplayAlert($"Success", $"Customer Added to System", "OK");
+		NavigationManager.NavigateTo("/customers");
+	}
+
+	private static string MakeId()
+	{
+		return "C" + ((DatabaseManager.GetAllCustomers().Select(c => Int32.Parse(c.CustomerID.Substring(1))).ToList()).Max() + 1).ToString();
+	}
 }

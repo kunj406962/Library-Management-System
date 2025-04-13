@@ -3,7 +3,7 @@
 <header class="d-flex justify-content-between my-4">
     <h1>Customer Management</h1>
     <div class="m-x-0">
-        <NavLink class="btn btn-primary" href="addbook">Add new customer</NavLink>
+        <NavLink class="btn btn-primary" href="addcustomer">Add new customer</NavLink>
     </div>
 </header>
 <table class="table table-bordered">
@@ -17,17 +17,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Book book in books)
+        @foreach (Customer customer in customers)
         {
             <tr>
-                <td>@book.BookId</td>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.Genre</td>
-                <td>@book.Quantity</td>
+                <td>@customer.CustomerID</td>
+                <td>@customer.FirstName</td>
+                <td>@customer.LastName</td>
+                <td>@customer.Email</td>
+                <td>@customer.Phone</td>
                 <td class="text-center">
-                    <button class="btn btn-warning">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-warning" @onclick="GoToEditCustomer">Edit</button>
+                    <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Delete</button>
                 </td>
             </tr>
         }
@@ -35,5 +35,17 @@
 </table>
 
 @code {
-    List<Book> books = new List<Book>();
+    [Inject] NavigationManager NavigationManager { get; set; }
+    List<Customer> customers = DatabaseManager.GetAllCustomers();
+
+    private void GoToEditCustomer()
+    {
+        NavigationManager.NavigateTo("/editcustomer");
+    }
+
+    private void DeleteCustomer(Customer c)
+    {
+        DatabaseManager.DeleteCustomer(c.CustomerID);
+        customers = DatabaseManager.GetAllCustomers();
+    }
 }

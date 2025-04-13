@@ -170,10 +170,10 @@ namespace CPRG211FinalProject.Classes
                     Customer customer = new Customer
                     {
                         CustomerID = reader.GetString(0),
-                        FirstName = reader.GetString(0),
-                        LastName = reader.GetString(0),
-                        Email = reader.GetString(0),
-                        Phone = reader.GetString(0)
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        Phone = reader.GetString(4)
                     };
                     customers.Add(customer);
                 }
@@ -195,10 +195,10 @@ namespace CPRG211FinalProject.Classes
                     customer = new Customer
                     {
                         CustomerID = reader.GetString(0),
-                        FirstName = reader.GetString(0),
-                        LastName = reader.GetString(0),
-                        Email = reader.GetString(0),
-                        Phone = reader.GetString(0)
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        Phone = reader.GetString(4)
                     };
                 }
             }
@@ -206,6 +206,22 @@ namespace CPRG211FinalProject.Classes
             return customer;
         }
 
+        public static void AddCustomer(Customer customer)
+        {
+            connection.Open();
+            string sql = $"insert into customer values ( '{customer.CustomerID}', '{customer.FirstName}', '{customer.LastName}', '{customer.Email}', '{customer.Phone}' ); ";
+            MySqlCommand command = new MySqlCommand( sql,connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
 
+        public static void DeleteCustomer(string id)
+        {
+            connection.Open();
+            string sql = $"delete from customer where customerId = '{id}' ;";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
