@@ -158,8 +158,72 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        public static List<Customer> GetAllCustomers()
+        {
+            connection.Open();
+            List<Customer> customers = new List<Customer>();
+            string sql = "select * from customer;";
 
+            MySqlCommand command = new MySqlCommand(sql,connection);
+            using(MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Customer customer = new Customer
+                    {
+                        CustomerID = reader.GetString(0),
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        Phone = reader.GetString(4)
+                    };
+                    customers.Add(customer);
+                }
+            }
+            connection.Close();
+            return customers;
+        }
 
+        public static Customer GetCustomer(string id)
+        {
+            connection.Open();
+            Customer customer = new Customer();
+            string sql = $"select * from customer where customer_id = '{id}'; ";
+            MySqlCommand command = new MySqlCommand(sql,connection);
+            using( MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    customer = new Customer
+                    {
+                        CustomerID = reader.GetString(0),
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        Phone = reader.GetString(4)
+                    };
+                }
+            }
+            connection.Close();
+            return customer;
+        }
 
+        public static void AddCustomer(Customer customer)
+        {
+            connection.Open();
+            string sql = $"insert into customer values ( '{customer.CustomerID}', '{customer.FirstName}', '{customer.LastName}', '{customer.Email}', '{customer.Phone}' ); ";
+            MySqlCommand command = new MySqlCommand( sql,connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void DeleteCustomer(string id)
+        {
+            connection.Open();
+            string sql = $"delete from customer where customerId = '{id}' ;";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
