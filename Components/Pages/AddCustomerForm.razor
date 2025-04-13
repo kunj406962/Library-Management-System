@@ -22,6 +22,7 @@
 		<label>Phone Number: </label>
 		<input type="text" class="form-control" placeholder="Enter Phone Number" @bind="customer.Phone">
 	</div>
+
 	<div class="form-group">
 		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="AddCustomer">Add Customer</button>
 	</div>
@@ -30,17 +31,18 @@
 
 @code {
 	[Inject] NavigationManager NavigationManager { get; set; }
-	Customer customer = new Customer { CustomerID = MakeId() };
+	Customer customer = new Customer { CustomerID = CustomerManager.MakeId() };
 
 	public async Task AddCustomer()
 	{
+		if (CustomerManager.CheckCustomer(customer))
+		{
+			await App.Current.MainPage.DisplayAlert($"Invalid", $"Please fill all fields", "OK");
+			return;
+		}
+		customer.Phone = CustomerManager.FormatPhoneNumber(customer.Phone);
 		DatabaseManager.AddCustomer(customer);
 		await App.Current.MainPage.DisplayAlert($"Success", $"Customer Added to System", "OK");
 		NavigationManager.NavigateTo("/customers");
-	}
-
-	private static string MakeId()
-	{
-		return "C" + ((DatabaseManager.GetAllCustomers().Select(c => Int32.Parse(c.CustomerID.Substring(1))).ToList()).Max() + 1).ToString();
 	}
 }
