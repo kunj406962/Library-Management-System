@@ -1,1 +1,75 @@
-﻿@page "/editcustomer"
+﻿@page "/editcustomer/{CustomerID}"
+
+<h1>Edit Customer: @customer.CustomerID</h1>
+
+<div>
+	<div class="form-group">
+		<label>First Name: </label>
+		<input type="text" class="form-control" placeholder="Update First Name" @bind="customer.FirstName" />
+	</div>
+
+	<div class="form-group">
+		<label>Last Name: </label>
+		<input type="text" class="form-control" placeholder="Update Last Name" @bind="customer.LastName" />
+	</div>
+
+	<div class="form-group">
+		<label>Email: </label>
+		<input type="text" class="form-control" placeholder="Update Email" @bind="customer.Email" />
+	</div>
+
+	<div class="form-group">
+		<label>Phone Number: </label>
+		<input type="text" class="form-control" placeholder="Update Phone Number" @bind="phone" />
+	</div>
+
+
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="() => UpdateCustomer(customer)">Update Customer Details</button>
+	</div>
+
+</div>
+
+@code {
+	Customer customer;
+	string phone;
+
+	[Inject] NavigationManager NavigationManager { get; set; }
+
+	[Parameter]
+	public string CustomerID { get; set; }
+
+	protected override void OnInitialized()
+	{
+		customer = DatabaseManager.GetCustomer(CustomerID);
+		phone = CustomerManager.RemoveDashes(customer.Phone);
+	}
+
+	private async Task UpdateCustomer(Customer cus)
+	{
+		if (CustomerManager.CheckCustomer(cus))
+		{
+			await App.Current.MainPage.DisplayAlert($"Invalid", $"Please fill all fields", "OK");
+			return;
+		}
+
+		if (!CustomerManager.IsValidEmail(cus.Email))
+		{
+			await App.Current.MainPage.DisplayAlert("Invalid Email", "Please enter a valid email address.", "OK");
+			return;
+		}
+
+		if (!CustomerManager.IsValidPhone(phone))
+		{
+			await App.Current.MainPage.DisplayAlert("Invalid Phone", "Please enter a 10-digit phone number.", "OK");
+			return;
+		}
+
+		customer.Phone = CustomerManager.FormatPhoneNumber(phone);
+		DatabaseManager.UpdateCustomer(cus);
+		await App.Current.MainPage.DisplayAlert($"Success", $"Customer information has been updated", "OK");
+		NavigationManager.NavigateTo("/customers");
+	}
+}
+
+

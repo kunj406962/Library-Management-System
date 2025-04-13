@@ -188,7 +188,7 @@ namespace CPRG211FinalProject.Classes
         {
             connection.Open();
             Customer customer = new Customer();
-            string sql = $"select * from customer where customer_id = '{id}'; ";
+            string sql = $"select * from customer where customerid = '{id}'; ";
             MySqlCommand command = new MySqlCommand(sql,connection);
             using( MySqlDataReader reader = command.ExecuteReader())
             {
@@ -223,6 +223,15 @@ namespace CPRG211FinalProject.Classes
             string sql = $"delete from customer where customerId = '{id}' ;";
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void UpdateCustomer(Customer customer)
+        {
+            connection.Open();
+            string sql = $"UPDATE customer SET FirstName = '{customer.FirstName}', LastName = '{customer.LastName}', Email = '{customer.Email}', Phone = '{customer.Phone}' WHERE CustomerId = '{customer.CustomerID}';";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            int execute = command.ExecuteNonQuery();
             connection.Close();
         }
     }
