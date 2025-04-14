@@ -239,6 +239,10 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        /// <summary>
+        /// Method that gets all borrow data and return a list of borrow books
+        /// </summary>
+        /// <returns></returns>
         public static List<BorrowBooks> GetAllBorrow()
         {
             List<BorrowBooks> list = new List<BorrowBooks>();
@@ -253,12 +257,52 @@ namespace CPRG211FinalProject.Classes
                     borrow.BorrowId = reader.GetString(0);
                     borrow.CustomerId = reader.GetString(1);
                     borrow.BookId = reader.GetString(2);
-                    borrow.Quantity = reader.GetInt32(4);
+                    borrow.Quantity = reader.GetInt32(3);
+                    borrow.Returned = reader.GetString(4);
                     list.Add(borrow);
                 }
             }
             connection.Close();
             return list;
+        }
+
+        /// <summary>
+        /// This retrieves an id and return a borrowbooks object from the database
+        /// </summary>
+        /// <param name="id">id of the borrowbook</param>
+        /// <returns></returns>
+        public static BorrowBooks GetBorrow(string id)
+        {
+            BorrowBooks borrow = new BorrowBooks();
+            string query = $"SELECT * FROM borrow where cborrowid = '{id}';";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            connection.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    borrow.BorrowId = reader.GetString(0);
+                    borrow.CustomerId = reader.GetString(1);
+                    borrow.BookId = reader.GetString(2);
+                    borrow.Quantity = reader.GetInt32(3);
+                    borrow.Returned = reader.GetString(4);
+                }
+            }
+            connection.Close();
+            return borrow;
+        }
+
+        /// <summary>
+        /// Add  borrow data to the databse
+        /// </summary>
+        /// <param name="borrow">Borrow Bok to add</param>
+        public static void AddBorrow(BorrowBooks borrow)
+        {
+            connection.Open();
+            string sql = $"INSERT INTO borrow values ( BorrowId='{borrow.BorrowId}', CustomerId='{borrow.CustomerId}', BookId='{borrow.BookId}', Quantity={borrow.Quantity}, Returned= {borrow.Returned}); ";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
         }
     }
 }
