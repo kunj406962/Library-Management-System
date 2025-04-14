@@ -152,9 +152,12 @@ namespace CPRG211FinalProject.Classes
         public static void DeleteBook(string bookId)
         {
             connection.Open();
-            string sqlQuery = $"DELETE FROM book WHERE BookId='{bookId}'";
-            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
-            int execute = command.ExecuteNonQuery();
+            string sqlQuery1= $"DELETE FROM borrow WHERE BookId='{bookId}'";
+            MySqlCommand command1 = new MySqlCommand(sqlQuery1, connection);
+            int execute1 = command1.ExecuteNonQuery();
+            string sqlQuery2 = $"DELETE FROM book WHERE BookId='{bookId}'";
+            MySqlCommand command2 = new MySqlCommand(sqlQuery2, connection);
+            int execute2 = command2.ExecuteNonQuery();
             connection.Close();
         }
 
