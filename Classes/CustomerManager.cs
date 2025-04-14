@@ -23,7 +23,9 @@ namespace CPRG211FinalProject.Classes
 
         public static string MakeId()
         {
-            return "C" + ((DatabaseManager.GetAllCustomers().Select(c => Int32.Parse(c.CustomerID.Substring(1))).ToList()).Max() + 1).ToString();
+            return DatabaseManager.GetAllCustomers().Count == 0 ? 
+                    "C1" : 
+                    "C" + ((DatabaseManager.GetAllCustomers().Select(c => Int32.Parse(c.CustomerID.Substring(1))).ToList()).Max() + 1).ToString();
         }
 
         public static bool IsValidEmail(string email)

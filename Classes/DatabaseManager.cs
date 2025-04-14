@@ -220,7 +220,7 @@ namespace CPRG211FinalProject.Classes
         public static void DeleteCustomer(string id)
         {
             connection.Open();
-            string sql = $"DELETE from customer WHERE customerId = '{id}'";
+            string sql = $"DELETE from borrow where customerID = '{id}'; DELETE from customer WHERE customerId = '{id}'";
             MySqlCommand command = new MySqlCommand(sql, connection);
             int execute = command.ExecuteNonQuery();
             connection.Close();
