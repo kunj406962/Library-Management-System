@@ -304,5 +304,32 @@ namespace CPRG211FinalProject.Classes
             command.ExecuteNonQuery();
             connection.Close();
         }
+
+        /// <summary>
+        /// To dlete a borrowed book from the database
+        /// </summary>
+        /// <param name="id">The id of the book to delete</param>
+        public static void DeleteBorrow(string id) 
+        {
+            connection.Open();
+            string sqlQuery1 = $"DELETE FROM borrow WHERE BookId='{id}'";
+            MySqlCommand command1 = new MySqlCommand(sqlQuery1, connection);
+            int execute1 = command1.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        /// <summary>
+        /// Update a borrow statement
+        /// </summary>
+        /// <param name="borrow">The borrowed data</param>
+        public static void UpdateBorrow(BorrowBooks borrow)
+        {
+            connection.Open();
+            string sqlQuery = $"UPDATE borrow SET CustomerId='{borrow.CustomerId}',BookId='{borrow.BookId}', Quantity={borrow.Quantity}, Quantity={borrow.Quantity}, Returned = {borrow.Returned} WHERE BorrowId='{borrow.BorrowId}'";
+            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
+            int execute = command.ExecuteNonQuery();
+            connection.Close();
+
+        }
     }
 }
