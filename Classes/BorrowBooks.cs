@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    internal class BorrowBooks
+    public class BorrowBooks
     {
+        public string BorrowId {  get; set; }
+        public string CustomerId {  get; set; }
+        public string BookId {  get; set; }
+        public int Quantity {  get; set; }
+        
+        public BorrowBooks() { }    
+        public BorrowBooks(string borrrowId, string customerId, string bookId, int quantity) 
+        {
+            BorrowId = borrrowId;
+            CustomerId = customerId;
+            BookId = bookId;
+            Quantity = quantity;
+        }
     }
 }

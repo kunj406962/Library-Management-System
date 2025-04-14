@@ -238,5 +238,27 @@ namespace CPRG211FinalProject.Classes
             int execute = command.ExecuteNonQuery();
             connection.Close();
         }
+
+        public static List<BorrowBooks> GetAllBorrow()
+        {
+            List<BorrowBooks> list = new List<BorrowBooks>();
+            string query = "SELECT * FROM borrow;";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            connection.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    BorrowBooks borrow = new BorrowBooks();
+                    borrow.BorrowId = reader.GetString(0);
+                    borrow.CustomerId = reader.GetString(1);
+                    borrow.BookId = reader.GetString(2);
+                    borrow.Quantity = reader.GetInt32(4);
+                    list.Add(borrow);
+                }
+            }
+            connection.Close();
+            return list;
+        }
     }
 }
