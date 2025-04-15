@@ -161,6 +161,10 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        /// <summary>
+        /// Gets all customers from the database.
+        /// </summary>
+        /// <returns>List of Customer objects</returns>
         public static List<Customer> GetAllCustomers()
         {
             connection.Open();
@@ -187,6 +191,11 @@ namespace CPRG211FinalProject.Classes
             return customers;
         }
 
+        /// <summary>
+        /// Retrieves a customer from the database using the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the customer</param>
+        /// <returns>A Customer object</returns>
         public static Customer GetCustomer(string id)
         {
             connection.Open();
@@ -211,6 +220,10 @@ namespace CPRG211FinalProject.Classes
             return customer;
         }
 
+        /// <summary>
+        /// Adds a new customer to the database.
+        /// </summary>
+        /// <param name="customer">The Customer object to add</param>
         public static void AddCustomer(Customer customer)
         {
             connection.Open();
@@ -220,6 +233,10 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        /// <summary>
+        /// Deletes a customer and their associated borrow records from the database.
+        /// </summary>
+        /// <param name="id">The ID of the customer to delete</param>
         public static void DeleteCustomer(string id)
         {
             connection.Open();
@@ -230,6 +247,10 @@ namespace CPRG211FinalProject.Classes
             connection.Close();
         }
 
+        /// <summary>
+        /// Updates a customer's information in the database.
+        /// </summary>
+        /// <param name="customer">The Customer object with updated information</param>
         public static void UpdateCustomer(Customer customer)
         {
             connection.Open();
@@ -274,7 +295,7 @@ namespace CPRG211FinalProject.Classes
         public static BorrowBooks GetBorrow(string id)
         {
             BorrowBooks borrow = new BorrowBooks();
-            string query = $"SELECT * FROM borrow where cborrowid = '{id}';";
+            string query = $"SELECT * FROM borrow where borrowid = '{id}';";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             connection.Open();
             using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -330,6 +351,26 @@ namespace CPRG211FinalProject.Classes
             int execute = command.ExecuteNonQuery();
             connection.Close();
 
+        }
+
+        public static List<BorrowBooks> GetAllBorrowsBasedOnCustomerID(string id)
+        {
+            connection.Open();
+            List < BorrowBooks > borrowBooks = new List<BorrowBooks>();
+            string sql = $"SELECT * from borrow where customerID = '{id}';";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            using(MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    BorrowBooks book = new BorrowBooks(
+                        reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetString(4)
+                        );
+                    borrowBooks.Add(book);
+                }
+            }
+            connection.Close();
+            return borrowBooks;
         }
     }
 }

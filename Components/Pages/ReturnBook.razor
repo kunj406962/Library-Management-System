@@ -1,0 +1,105 @@
+﻿@page "/returnbook"
+@using CPRG211FinalProject.Classes
+
+<div class="container-fluid">
+    <h4 class="my-2">Reservation Finder</h4>
+
+    <div class="d-flex flex-nowrap  gap-4">
+
+        <div class="w-25">
+            <label>Customer ID:</label>
+            <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
+        </div>
+
+        <div class="w-25">
+            <label></label>
+            <button class="btn btn-primary w-100" @onclick="() => SearchBorrows(customerID)">Find Items</button>
+        </div>
+
+    </div>
+
+    <div class="flights-found-field">
+        <h4 class="mt-5 mb-2">Items</h4>
+        @if (borrowsFound.Count == 0)
+        {
+            <span class="formatted-field form-control">Loading...</span>
+        }
+        else
+        {
+            <select class="formatted-field form-control" @bind="selectedBorrowId">
+                <option value="" selected disabled>Please select items...</option>
+                @foreach (BorrowBooks b in borrowsFound)
+                {
+                    <option value=@b.BorrowId>@DatabaseManager.GetBook(b.BookId).Title</option>
+                }
+            </select>
+            if (!String.IsNullOrEmpty(selectedBorrowId))
+            {
+                OnChange();
+            }
+        }
+    </div>
+
+
+    <h4 class="mt-5 mb-0"></h4>
+    <div class="reservation-container">
+        <div class="form-group">
+            <label>Borrow ID:</label>
+            <span class="form-control">@SelectedBorrow.BorrowId</span>
+        </div>
+
+        <div class="form-group">
+            <label>Customer Name:</label>
+            <span class="form-control">@name</span>
+        </div>
+
+        <div class="form-group">
+            <label>Book ID:</label>
+            <span class="form-control">@SelectedBorrow.BookId</span>
+        </div>
+        <div class="form-group">
+            <label>Quantity:</label>
+            <span class="form-control">@SelectedBorrow.Quantity</span>
+        </div>
+        <div class="form-group">
+            <label>Return Status:</label>
+            <span class="form-control">@SelectedBorrow.Returned</span>
+        </div>
+    </div>
+    <div class="final-container">
+        <div class="d-flex flex-column justify-content-center">
+            <button class="btn btn-primary my-3 text-start" style="width: 200px" @onclick="Return">Return</button>
+            @* <span class="error text-start">@message</span> *@
+        </div>
+    </div>
+</div>
+
+@code {
+    string customerID = "";
+    string selectedBorrowId = "";
+    string name = "";
+    List<BorrowBooks> borrowsFound = new List<BorrowBooks>();
+    BorrowBooks SelectedBorrow = new BorrowBooks();
+    List<string> itemsFound = new List<string>();
+
+    private void OnChange()
+    {
+        SelectedBorrow = DatabaseManager.GetBorrow(selectedBorrowId);  
+
+        if (SelectedBorrow != null)
+        {
+            var customer = DatabaseManager.GetCustomer(SelectedBorrow.CustomerId);
+            name = customer.FirstName + " " + customer.LastName;
+        }
+    }
+
+    private void SearchBorrows(string customerID)
+    {
+        borrowsFound = DatabaseManager.GetAllBorrowsBasedOnCustomerID(customerID); 
+    }
+
+    private void Return()
+    {
+        
+    }
+}

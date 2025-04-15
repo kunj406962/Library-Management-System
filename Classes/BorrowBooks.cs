@@ -15,7 +15,7 @@ namespace CPRG211FinalProject.Classes
         public int Quantity {  get; set; }
         
         public BorrowBooks() { }    
-        public BorrowBooks(string borrrowId, string customerId, string bookId, int quantity string returned) 
+        public BorrowBooks(string borrrowId, string customerId, string bookId, int quantity ,string returned) 
         {
             BorrowId = borrrowId;
             CustomerId = customerId;

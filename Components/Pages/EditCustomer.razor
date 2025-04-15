@@ -42,6 +42,7 @@
 	protected override void OnInitialized()
 	{
 		customer = DatabaseManager.GetCustomer(CustomerID);
+
 		phone = CustomerManager.RemoveDashes(customer.Phone);
 	}
 
@@ -66,7 +67,9 @@
 		}
 
 		customer.Phone = CustomerManager.FormatPhoneNumber(phone);
+
 		DatabaseManager.UpdateCustomer(cus);
+
 		await App.Current.MainPage.DisplayAlert($"Success", $"Customer information has been updated", "OK");
 		NavigationManager.NavigateTo("/customers");
 	}
