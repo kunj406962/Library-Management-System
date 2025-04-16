@@ -61,7 +61,7 @@
 
     <div class="form-group">
         <label>Book Name:</label>
-        <input type="text" class="form-control" placeholder="Book Name" @* @bind="SelectedBorrow.BookId" *@ readonly>
+        <input type="text" class="form-control" placeholder="Book Name" @bind="title" readonly>
     </div>
 
     <div class="form-group">
@@ -70,7 +70,7 @@
     </div>
 
     <div class="form-group">
-        <button class="btn btn-outline-secondary" type="button" @* @onclick="ReturnAll" *@>Return All</button>
+        <button class="btn btn-outline-secondary" type="button" @onclick="Return">Return</button>
     </div>
 </div>
 
@@ -85,12 +85,15 @@
     string title = "";
     List<BorrowBooks> borrowsFound = new List<BorrowBooks>();
     BorrowBooks SelectedBorrow = new BorrowBooks();
+    Book book;
     List<string> itemsFound = new List<string>();
     private string quantity;
 
     private void OnChange()
     {
-        SelectedBorrow = DatabaseManager.GetBorrow(selectedBorrowId);  
+        SelectedBorrow = DatabaseManager.GetBorrow(selectedBorrowId);
+        book = DatabaseManager.GetBook(SelectedBorrow.BookId);
+        title = book.Title;
 
         if (SelectedBorrow != null)
         {
@@ -98,15 +101,20 @@
             name = customer.FirstName + " " + customer.LastName;
         }
     }
+
     /// <summary>
     /// searches the database for books borrowed depending on customer
     /// </summary>
     /// <param name="customerID">Uses customer Id for returned books</param>
-    private void SearchBorrows(string customerID)
+    private async Task SearchBorrows(string customerID)
     {
-        borrowsFound = BorrowManager.BooksNotReturned(customerID); 
+        borrowsFound = BorrowManager.BooksNotReturned(customerID);
+        if (borrowsFound.Count == 0)
+        {
+            await App.Current.MainPage.DisplayAlert($"Important", $"Customer has no returnable books", "OK");
+        }
     }
-    
+
 
     /// <summary>
     /// Updates the value of the selected borrowed book quntity
@@ -118,15 +126,24 @@
     {
         try
         {
+            //Changed Status to Yes
+            SelectedBorrow.Returned = "YES";
+            book.Quantity += SelectedBorrow.Quantity;
+
+            DatabaseManager.UpdateBook(book);
+
             // updates the value of the borrow quantity
-            // checks for quantity to see if status can be changed to returned
             DatabaseManager.UpdateBorrow(SelectedBorrow);
 
             // display alert for update success
             await App.Current.MainPage.DisplayAlert($"Success", $"Your book has been returned", "OK");
+            customerID = "";
+            selectedBorrowId = "";
+            name = "";
+            title = "";
 
             // navigate to the books page
-            NavigationManager.NavigateTo("/books");
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception ex)
         {
