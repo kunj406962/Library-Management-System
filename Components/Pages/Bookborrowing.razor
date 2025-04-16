@@ -1,0 +1,157 @@
+﻿@page "/bookborrowing"
+@using CPRG211FinalProject.Classes
+
+<div class="container-fluid">
+    <h4 class="my-2">Borrow Book</h4>
+
+    <div class="d-flex flex-nowrap  gap-4"> 
+
+        <div class="w-25"> 
+            <label>Customer ID:</label> 
+            <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
+            <button class="btn btn-outline-secondary" type="button" @onclick="SearchCustomer">Find Customer</button>
+        </div>
+
+    </div>
+
+    <h4 class="mt-5 mb-2">Choose a Book to Borrow</h4>
+    @if (bookList.Count == 0)
+    {
+        <span class="formatted-field form-control">Loading..</span>
+    }
+    else
+    {
+        <select class="formatted-field form-control" @bind="selectedBookID">
+            <option value="" selected disabled>Please select the book...</option>
+            @foreach (Book book in bookList)
+            {
+                <option value=@book.BookId>@DatabaseManager.GetBook(book.BookId).Title</option>
+            }
+        </select>
+        if (!String.IsNullOrEmpty(selectedBookID))
+        {
+            OnChange();
+        }
+    }
+
+
+    <h4 class="mt-5 mb-0"></h4>
+    <div class="reservation-container">
+        <div class="form-group">
+            <label>Customer ID</label>
+            <input type="text" class="form-control" placeholder="Customer ID" @bind="customerID" readonly>
+        </div>
+        <div class="form-group">
+            <label>Customer Name</label>
+            <input type="text" class="form-control" placeholder="Customer Name" @bind="customerName" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Book ID</label>
+            <input type="text" class="form-control" placeholder="Book ID" @bind="selectedBookID" readonly>
+        </div>
+        <div class="form-group">
+            <label>Author</label>
+            <input type="text" class="form-control" placeholder="Author Name" @bind="author" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Genre</label>
+            <input type="text" class="form-control" placeholder="Genre" @bind="genre" readonly>
+        </div>
+        <div class="form-group">
+            <label>Available Quantity</label>
+            <input type="text" class="form-control" placeholder=" Available Quantity" @bind="availableQuantity" readonly>
+        </div>
+        <div class="form-group">
+            <label>Quantity to Borrow</label>
+            <input type="text" class="form-control" placeholder=" Borrow Quantity" @bind="borrowQuantity">
+        </div>
+
+        <div class="form-group" >
+            <button class="btn btn-outline-secondary" type="button" @onclick="Borrow">borrow</button>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    // Intialize variables to be used
+    string customerID;
+    string customerName;
+    string selectedBookID;
+    string author;
+    string genre;
+    int availableQuantity;
+    string borrowQuantity;
+
+    public Book borrowBook;
+    List<Book> bookList = BookManager.Books; // get the list of books to display to the user so they can borrow
+    BorrowBooks bookForBorrowing = new BorrowBooks();
+    Customer borrowCustomer;
+
+    private void OnChange()
+    {
+        borrowBook = DatabaseManager.GetBook(selectedBookID);
+        author = borrowBook.Author;
+        genre = borrowBook.Genre;
+        availableQuantity = borrowBook.Quantity;
+    }
+
+    private int CheckQuantity()
+    {
+        int intQuantity;
+        if (Int32.TryParse(borrowQuantity, out intQuantity))
+        {
+            if (intQuantity >= 0)
+            {
+                if (intQuantity > availableQuantity)
+                {
+                    throw new Exception($"Quantity must be less than or equal to available book count of {availableQuantity}");
+                } else
+                {
+                    return intQuantity;
+                }
+            }
+            else
+            {
+                throw new Exception("Quantity must be a positive integer");
+            }
+        }
+        else
+        {
+            throw new Exception("Quantity must be a whole number");
+        }
+
+    }
+
+    private async Task Borrow()
+    {
+        try
+        {
+            BorrowManager.AddBorrow(customerID, selectedBookID, CheckQuantity());
+
+            await App.Current.MainPage.DisplayAlert($"Success", $"Book has been borrowed", "OK");
+        }
+        catch (Exception ex)
+        {
+            await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
+        }
+    }
+
+    private async Task SearchCustomer()
+    {
+        borrowCustomer = null;
+        borrowCustomer = DatabaseManager.GetCustomer(customerID);
+        if (String.IsNullOrEmpty(borrowCustomer.CustomerID))
+        {
+            await App.Current.MainPage.DisplayAlert($"Important", $"Customer Id does not Exist", "OK");
+        } else // customer exists
+        {
+            customerID = borrowCustomer.CustomerID;
+            customerName = borrowCustomer.FirstName + " " + borrowCustomer.LastName;
+        }
+    }
+
+
+}
