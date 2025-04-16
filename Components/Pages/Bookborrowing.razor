@@ -126,10 +126,23 @@
 
     }
 
+    private void CheckID()
+    {
+        if (String.IsNullOrEmpty(customerID))
+        {
+            throw new Exception("Enter Customer ID first!!");
+        }
+        else if (String.IsNullOrEmpty(selectedBookID))
+        {
+            throw new Exception("Choose A Book First!!");
+        }
+    }
+
     private async Task Borrow()
     {
         try
         {
+            CheckID();
             BorrowManager.AddBorrow(customerID, selectedBookID, CheckQuantity());
             customerID = null;
             customerName = null;

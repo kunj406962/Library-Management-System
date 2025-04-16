@@ -19,6 +19,7 @@ namespace CPRG211FinalProject.Classes
         /// <param name="quatity">Quantity of new book</param>
         public static void CreateBook(string title, string author, string genre, int quatity)
         {
+            Books = Books.OrderBy(book => book.BookId.Length).ThenBy(book => book.BookId).ToList();
             Book book = new Book();
             if (Books.Count == 0)
             {

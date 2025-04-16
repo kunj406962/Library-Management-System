@@ -38,8 +38,7 @@
 
 
 @code {
-    List<Book> books = DatabaseManager.GetAllBooks(); 
-
+    List<Book> books = DatabaseManager.GetAllBooks().OrderBy(book => book.BookId.Length).ThenBy(book => book.BookId).ToList();
     private void EditBook(Book book)
     {
         NavigationManager.NavigateTo($"/editbook/{book.BookId}");

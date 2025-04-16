@@ -42,6 +42,7 @@ namespace CPRG211FinalProject.Classes
         /// <param name="quantity">quantity that has been borrowed</param>
         public static void AddBorrow(string custId, string bookId, int quantity)
         {
+            BorrowBooks = BorrowBooks.OrderBy(borrow => borrow.BorrowId.Length).ThenBy(borrow => borrow.BorrowId).ToList();
             BorrowBooks borrow = new BorrowBooks();
             Book book= DatabaseManager.GetBook(bookId);
             if (BorrowBooks.Count == 0)
@@ -54,6 +55,7 @@ namespace CPRG211FinalProject.Classes
                 book.Quantity-=quantity;
                 DatabaseManager.UpdateBook(book);
                 DatabaseManager.AddBorrow(borrow);
+                BorrowBooks.Add(borrow);
             }
             else
             {
@@ -68,6 +70,7 @@ namespace CPRG211FinalProject.Classes
                 book.Quantity -= quantity;
                 DatabaseManager.UpdateBook(book);
                 DatabaseManager.AddBorrow(borrow);
+                BorrowBooks.Add(borrow) ;
             }
         }
 

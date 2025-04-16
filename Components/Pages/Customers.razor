@@ -36,7 +36,7 @@
 
 @code {
     [Inject] NavigationManager NavigationManager { get; set; }
-    List<Customer> customers = DatabaseManager.GetAllCustomers();
+    List<Customer> customers = DatabaseManager.GetAllCustomers().OrderBy(customer => customer.CustomerID.Length).ThenBy(customer => customer.CustomerID).ToList();
 
     private void GoToEditCustomer(Customer cus)
     {
