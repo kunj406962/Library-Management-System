@@ -28,13 +28,16 @@
 
 </div>
 
+
 @code {
+
+
 	// used to navigate back to the Home page
 	[Inject] NavigationManager NavigationManager { get; set; }
 	private Book book = new Book();
 	private string quantity;
 
-	[Parameter] 
+	[Parameter]
 	public string BookId { get; set; } // parameter for the book id
 
 

@@ -320,7 +320,7 @@ namespace CPRG211FinalProject.Classes
         public static void AddBorrow(BorrowBooks borrow)
         {
             connection.Open();
-            string sql = $"INSERT INTO borrow values ( BorrowId='{borrow.BorrowId}', CustomerId='{borrow.CustomerId}', BookId='{borrow.BookId}', Quantity={borrow.Quantity}, Returned= {borrow.Returned}); ";
+            string sql = $"INSERT INTO borrow (BorrowId, CustomerId, BookId, Quantity, Returned) VALUES ('{borrow.BorrowId}', '{borrow.CustomerId}', '{borrow.BookId}', {borrow.Quantity}, '{borrow.Returned}');";
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.ExecuteNonQuery();
             connection.Close();
