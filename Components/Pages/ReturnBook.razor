@@ -108,11 +108,20 @@
     /// <param name="customerID">Uses customer Id for returned books</param>
     private async Task SearchBorrows()
     {
-        borrowsFound = BorrowManager.BooksNotReturned(customerID);
-        if (borrowsFound.Count == 0)
+        Customer customer = null;
+        customer = DatabaseManager.GetCustomer(customerID);
+        if (String.IsNullOrEmpty(customer.CustomerID))
         {
-            customerID = null;
-            await App.Current.MainPage.DisplayAlert($"Important", $"Customer has no returnable books", "OK");
+            await App.Current.MainPage.DisplayAlert($"Important", $"Customer Id does not Exist", "OK");
+        }
+        else
+        {
+            borrowsFound = BorrowManager.BooksNotReturned(customerID);
+            if (borrowsFound.Count == 0)
+            {
+                customerID = null;
+                await App.Current.MainPage.DisplayAlert($"Important", $"Customer has no returnable books", "OK");
+            }
         }
     }
 
