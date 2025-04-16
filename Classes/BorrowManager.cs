@@ -9,7 +9,14 @@ namespace CPRG211FinalProject.Classes
     public static class BorrowManager
     {
         public static List<BorrowBooks> BorrowBooks = DatabaseManager.GetAllBorrow();
-
+        /// <summary>
+        /// Checks the desired quantity, and returns a message
+        /// according to the logic if it's possible or not.
+        /// </summary>
+        /// <param name="bookId">Id of book</param>
+        /// <param name="quantity"> Quantitiy of Book</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static int CheckQuantity(string bookId, int quantity) 
         {
             Book book= DatabaseManager.GetBook(bookId);

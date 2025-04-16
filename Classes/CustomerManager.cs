@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,8 @@ namespace CPRG211FinalProject.Classes
         }
 
         /// <summary>
-        /// Removes dashes from a formatted phone number.
+        /// Removes dashes from a formatted phone number
+        /// for it to be displayed properly
         /// </summary>
         /// <param name="phone">Phone number in format XXX-XXX-XXXX</param>
         /// <returns>Phone number with only digits</returns>
