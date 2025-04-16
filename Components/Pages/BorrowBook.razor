@@ -1,0 +1,89 @@
+﻿@page "/borrowbook"
+@using CPRG211FinalProject.Classes
+
+<div class="container-fluid">
+    <h4 class="my-2">Borrow Book</h4>
+
+    @* <div class="d-flex flex-nowrap  gap-4"> *@
+
+    @*     <div class="w-25"> *@
+    @*         <label>Customer ID:</label> *@
+    @*         <input class="form-control" type="text" placeholder="Any" @bind="customerID" /> *@
+    @*     </div> *@
+
+    @*     <div class="w-25"> *@
+    @*         <label></label> *@
+    @*         <button class="btn btn-primary w-100" @onclick="() => SearchBorrows(customerID)">Find Items</button> *@
+    @*     </div> *@
+
+    @* </div> *@
+
+    <div class="BookDropdownContainer">
+        <h4 class="mt-5 mb-2">Items</h4>
+        @if (bookList.Count == 0)
+        {
+            <span class="formatted-field form-control">Loading..</span>
+        }
+        else
+        {
+            <select class="formatted-field form-control" @bind="selectedBookID">
+                <option value="" selected disabled>Please select the book...</option>
+                @foreach (Book book in bookList)
+                {
+                    <option value=@book.BookId>@DatabaseManager.GetBook(book.BookId).Title</option>
+                }
+            </select>
+            @* if (!String.IsNullOrEmpty(selectedBorrowId)) *@
+            @* { *@
+            @*     OnChange(); *@
+            @* } *@
+        }
+    </div>
+
+
+    <h4 class="mt-5 mb-0"></h4>
+    <div class="reservation-container">
+        <div class="form-group">
+            <label>Customer Name</label>
+            <span class="form-control">@bookForBorrowing</span>
+        </div>
+
+        <div class="form-group">
+            <label>Book ID</label>
+            <span class="form-control">@bookForBorrowing</span>
+        </div>
+        <div class="form-group">
+            <label>Author</label>
+            <span class="form-control">@bookForBorrowing</span>
+        </div>
+
+        <div class="form-group">
+            <label>Genre</label>
+            <span class="form-control">@bookForBorrowing</span>
+        </div>
+        <div class="form-group">
+            <label>Quantity:</label>
+            <span class="form-control">@bookForBorrowing</span>
+        </div>
+
+    </div>
+    @* <div class="final-container"> *@
+    @*     <div class="input-group w-50"> *@
+    @*         <input type="text" class="form-control" placeholder="Enter Return Quantity" @bind="quantity" aria-label="two button addons"> *@
+    @*         <button class="btn btn-outline-secondary" type="button" @onclick="Borrow">Borrow</button> *@
+    @*         <button class="btn btn-outline-secondary" type="button" @onclick="BorrowAll">Borrow All</button> *@
+    @*     </div> *@
+    @* </div> *@
+</div>
+
+@code {
+    string customerID = "";
+
+    List<Book> bookList = DatabaseManager.GetAllBooks(); // get the list of books to display to the user so they can borrow
+    List<BorrowBooks> borrowingList = new List<BorrowBooks>(); // once user clicks borrow, create the borrow book object and add to the list
+    BorrowBook bookForBorrowing = new BorrowBook();
+
+    // Intialize variables to be used 
+    private string quantity;
+    private string selectedBookID;
+}
