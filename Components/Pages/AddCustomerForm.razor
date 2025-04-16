@@ -31,6 +31,7 @@
 
 @code {
 	[Inject] NavigationManager NavigationManager { get; set; }
+
 	string phone;
 	Customer customer = new Customer { CustomerID = CustomerManager.MakeId()};
 
@@ -54,8 +55,10 @@
 			await App.Current.MainPage.DisplayAlert("Invalid Phone", "Please enter a 10-digit phone number.", "OK");
 			return;
 		}
+
 		cus.Phone = CustomerManager.FormatPhoneNumber(phone);
 		DatabaseManager.AddCustomer(cus);
+
 		await App.Current.MainPage.DisplayAlert($"Success", $"Customer Added to System", "OK");
 		NavigationManager.NavigateTo("/customers");
 	}
