@@ -104,6 +104,7 @@
     {
         borrowsFound = DatabaseManager.GetAllBorrowsBasedOnCustomerID(customerID); 
     }
+    
     /// <summary>
     /// Checks for input of quantity
     /// To validate if it's a real or valid amount to put
@@ -116,11 +117,12 @@
         int intQuantity;
         if (Int32.TryParse(quantity, out intQuantity))
         {
-            if (intQuantity > 0 || intQuantity > SelectedBorrow.Quantity)
+            if (intQuantity > 0 || intQuantity >= SelectedBorrow.Quantity)
             {
                 if(intQuantity == SelectedBorrow.Quantity)
                 {
                     SelectedBorrow.Returned = "YES";
+                    
                 }
                 return SelectedBorrow.Quantity - intQuantity;
             }
