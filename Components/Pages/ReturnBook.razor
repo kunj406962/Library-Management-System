@@ -68,20 +68,23 @@
     </div>
     <div class="final-container">
         <div class="input-group w-50">
-            <input type="text" class="form-control" placeholder="Enter Return Quantity" aria-label="two button addons">
-            <button class="btn btn-outline-secondary" type="button">Return</button>
-            <button class="btn btn-outline-secondary" type="button">Return All</button>
+            <input type="text" class="form-control" placeholder="Enter Return Quantity" @bind="quantity" aria-label="two button addons">
+            <button class="btn btn-outline-secondary" type="button" @onclick="Return">Return</button>
+            <button class="btn btn-outline-secondary" type="button" @onclick="ReturnAll">Return All</button>
         </div>
     </div>
 </div>
 
 @code {
+    //navigates back to books page 
+    [Inject] NavigationManager NavigationManager { get; set; }
     string customerID = "";
     string selectedBorrowId = "";
     string name = "";
     List<BorrowBooks> borrowsFound = new List<BorrowBooks>();
     BorrowBooks SelectedBorrow = new BorrowBooks();
     List<string> itemsFound = new List<string>();
+    private string quantity;
 
     private void OnChange()
     {
@@ -99,8 +102,92 @@
         borrowsFound = DatabaseManager.GetAllBorrowsBasedOnCustomerID(customerID); 
     }
 
-    private void Return()
+    private int CheckQuantity()
     {
-        
+        int intQuantity;
+        if (Int32.TryParse(quantity, out intQuantity))
+        {
+            if (intQuantity > 0 || intQuantity > SelectedBorrow.Quantity)
+            {
+                if(intQuantity == SelectedBorrow.Quantity)
+                {
+                    SelectedBorrow.Returned = "YES";
+                }
+                return SelectedBorrow.Quantity - intQuantity;
+            }
+            else
+            {
+                throw new Exception("Quantity must be a valid amount");
+            }
+        }
+        else
+        {
+            throw new Exception("Quantity must be a whole number");
+        }
+
+    }
+    /// <summary>
+    /// Updates the value of the selected borrowed book qunaity
+    /// If selected returned quantity is equal to the amount they borrowed
+    /// then the status of returned turns to NO
+    /// </summary>
+    /// <returns></returns>
+    private async Task Return()
+    {
+        try
+        {
+            // updates the value of the borrow quantity
+            // checks for quantity to see if status can be changed to returned
+            SelectedBorrow.Quantity = CheckQuantity();
+            DatabaseManager.UpdateBorrow(SelectedBorrow);
+
+            // display alert for update success
+            await App.Current.MainPage.DisplayAlert($"Success", $"Your book has been returned", "OK");
+
+            // navigate to the books page
+            NavigationManager.NavigateTo("/books");
+        }
+        catch (Exception ex)
+        {
+            await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private async Task ReturnAll()
+    {
+        try
+        {
+            // updates the value of the boroow quantity
+            // checks for quantity to see if status can be changed to returned
+            // book.Quantity = Convert.ToInt32(quantity);
+            SelectedBorrow.Returned = FullReturn();
+            DatabaseManager.UpdateBorrow(SelectedBorrow);
+
+            // display alert for update success
+            await App.Current.MainPage.DisplayAlert($"Success", $"Your books have been returned", "OK");
+
+            // navigate to the books page
+            NavigationManager.NavigateTo("/books");
+        }
+        catch (Exception ex)
+        {
+            await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
+        }
+    }
+
+    private string FullReturn()
+    {
+        if(SelectedBorrow.Quantity != 0)
+        {
+            SelectedBorrow.Quantity = 0;
+            return SelectedBorrow.Returned = "YES";
+        }
+        else
+        {
+            throw new Exception("But has already been returned");
+        }
     }
 }
