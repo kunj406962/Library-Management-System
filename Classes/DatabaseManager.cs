@@ -357,7 +357,7 @@ namespace CPRG211FinalProject.Classes
         {
             connection.Open();
             List < BorrowBooks > borrowBooks = new List<BorrowBooks>();
-            string sql = $"SELECT * from borrow where customerID = '{id}';";
+            string sql = $"SELECT * from borrow where customerID = '{id.ToUpper()}';";
             MySqlCommand command = new MySqlCommand(sql, connection);
             using(MySqlDataReader reader = command.ExecuteReader())
             {

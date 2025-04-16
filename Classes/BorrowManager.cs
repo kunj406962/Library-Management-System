@@ -70,5 +70,24 @@ namespace CPRG211FinalProject.Classes
                 DatabaseManager.AddBorrow(borrow);
             }
         }
+
+        /// <summary>
+        /// Returns only books that have not been returned
+        /// </summary>
+        /// <param name="custId"></param>
+        /// <returns></returns>
+        public static List<BorrowBooks> BooksNotReturned(string custId)
+        {
+            List<BorrowBooks> data= DatabaseManager.GetAllBorrowsBasedOnCustomerID(custId);
+            List<BorrowBooks> onlyNotReturned= new List<BorrowBooks>();
+            foreach (BorrowBooks book in data) 
+            {
+                if (book.Returned == "NO")
+                {
+                    onlyNotReturned.Add(book);
+                }
+            }
+            return onlyNotReturned;
+        }
     }
 }

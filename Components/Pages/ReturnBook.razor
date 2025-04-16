@@ -1,79 +1,80 @@
 ﻿@page "/returnbook"
 @using CPRG211FinalProject.Classes
 
-<div class="container-fluid">
-    <h4 class="my-2">Return Book</h4>
+<h4 class="my-2">Return Book</h4>
 
-    <div class="d-flex flex-nowrap  gap-4">
+<div class="d-flex flex-nowrap  gap-4">
 
-        <div class="w-25">
-            <label>Customer ID:</label>
-            <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
-        </div>
-
-        <div class="w-25">
-            <label></label>
-            <button class="btn btn-primary w-100" @onclick="() => SearchBorrows(customerID)">Find Items</button>
-        </div>
-
+    <div class="w-25">
+        <label>Customer ID:</label>
+        <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
     </div>
 
-    <div class="flights-found-field">
-        <h4 class="mt-5 mb-2">Items</h4>
-        @if (borrowsFound.Count == 0)
-        {
-            <span class="formatted-field form-control">Loading..</span>
-        }
-        else
-        {
-            <select class="formatted-field form-control" @bind="selectedBorrowId">
-                <option value="" selected disabled>Please select items...</option>
-                @foreach (BorrowBooks b in borrowsFound)
-                {
-                    <option value=@b.BorrowId>@DatabaseManager.GetBook(b.BookId).Title</option>
-                }
-            </select>
-            if (!String.IsNullOrEmpty(selectedBorrowId))
+    <div class="w-25">
+        <label></label>
+        <button class="btn btn-primary w-100" @onclick="() => SearchBorrows(customerID)">Find Data</button>
+    </div>
+
+</div>
+
+<div class="flights-found-field">
+    <h4 class="mt-5 mb-2">Items</h4>
+    @if (borrowsFound.Count == 0)
+    {
+        <select class="formatted-field form-control" @bind="selectedBorrowId">
+            <option value="" selected disabled>No Books To Be Returned </option>
+        </select>
+    }
+    else
+    {
+        <select class="formatted-field form-control" @bind="selectedBorrowId">
+            <option value="" selected disabled>Please select items...</option>
+            @foreach (BorrowBooks b in borrowsFound)
             {
-                OnChange();
+                <option value=@b.BorrowId>@DatabaseManager.GetBook(b.BookId).Title</option>
             }
+        </select>
+        if (!String.IsNullOrEmpty(selectedBorrowId))
+        {
+            OnChange();
         }
+    }
+</div>
+
+
+<h4 class="mt-5 mb-0">View Data</h4>
+<div class="reservation-container">
+    <div class="form-group">
+        <label>Borrow ID:</label>
+        <input type="text" class="form-control" placeholder="BorrowID" @bind="SelectedBorrow.BorrowId"  readonly>
     </div>
 
-
-    <h4 class="mt-5 mb-0"></h4>
-    <div class="reservation-container">
-        <div class="form-group">
-            <label>Borrow ID:</label>
-            <span class="form-control">@SelectedBorrow.BorrowId</span>
-        </div>
-
-        <div class="form-group">
-            <label>Customer Name:</label>
-            <span class="form-control">@name</span>
-        </div>
-
-        <div class="form-group">
-            <label>Book ID:</label>
-            <span class="form-control">@SelectedBorrow.BookId</span>
-        </div>
-        <div class="form-group">
-            <label>Quantity:</label>
-            <span class="form-control">@SelectedBorrow.Quantity</span>
-        </div>
-        <div class="form-group">
-            <label>Return Status:</label>
-            <span class="form-control">@SelectedBorrow.Returned</span>
-        </div>
+    <div class="form-group">
+        <label>Customer Name:</label>
+        <input type="text" class="form-control" placeholder="CustomerName" @bind="name" readonly>
     </div>
-    <div class="final-container">
-        <div class="input-group w-50">
-            <input type="text" class="form-control" placeholder="Enter Return Quantity" @bind="quantity" aria-label="two button addons">
-            <button class="btn btn-outline-secondary" type="button" @onclick="Return">Return</button>
-            <button class="btn btn-outline-secondary" type="button" @onclick="ReturnAll">Return All</button>
-        </div>
+
+    <div class="form-group">
+        <label>Book ID:</label>
+        <input type="text" class="form-control" placeholder="BookID" @bind="SelectedBorrow.BookId" readonly>
+    </div>
+
+    <div class="form-group">
+        <label>Book Name:</label>
+        <input type="text" class="form-control" placeholder="Book Name" @* @bind="SelectedBorrow.BookId" *@ readonly>
+    </div>
+
+    <div class="form-group">
+        <label>Quantity Borrowed:</label>
+        <input type="text" class="form-control" placeholder="Quantity Borrowed" @bind="SelectedBorrow.Quantity" readonly>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-outline-secondary" type="button" @* @onclick="ReturnAll" *@>Return All</button>
     </div>
 </div>
+
+
 
 @code {
     //navigates back to books page after returning books
@@ -81,6 +82,7 @@
     string customerID = "";
     string selectedBorrowId = "";
     string name = "";
+    string title = "";
     List<BorrowBooks> borrowsFound = new List<BorrowBooks>();
     BorrowBooks SelectedBorrow = new BorrowBooks();
     List<string> itemsFound = new List<string>();
@@ -102,41 +104,10 @@
     /// <param name="customerID">Uses customer Id for returned books</param>
     private void SearchBorrows(string customerID)
     {
-        borrowsFound = DatabaseManager.GetAllBorrowsBasedOnCustomerID(customerID); 
+        borrowsFound = BorrowManager.BooksNotReturned(customerID); 
     }
     
-    /// <summary>
-    /// Checks for input of quantity
-    /// To validate if it's a real or valid amount to put
-    /// quantity depends on selected customer book
-    /// </summary>
-    /// <returns>Returns appropiate exceptions or updates the borrow table in the database</returns>
-    /// <exception cref="Exception"></exception>
-    private int CheckQuantity()
-    {
-        int intQuantity;
-        if (Int32.TryParse(quantity, out intQuantity))
-        {
-            if (intQuantity > 0 || intQuantity >= SelectedBorrow.Quantity)
-            {
-                if(intQuantity == SelectedBorrow.Quantity)
-                {
-                    SelectedBorrow.Returned = "YES";
-                    
-                }
-                return SelectedBorrow.Quantity - intQuantity;
-            }
-            else
-            {
-                throw new Exception("Quantity must be a valid amount");
-            }
-        }
-        else
-        {
-            throw new Exception("Quantity must be a whole number");
-        }
 
-    }
     /// <summary>
     /// Updates the value of the selected borrowed book quntity
     /// If selected returned quantity is equal to the amount they borrowed
@@ -149,7 +120,6 @@
         {
             // updates the value of the borrow quantity
             // checks for quantity to see if status can be changed to returned
-            SelectedBorrow.Quantity = CheckQuantity();
             DatabaseManager.UpdateBorrow(SelectedBorrow);
 
             // display alert for update success
@@ -176,7 +146,7 @@
             // updates the value of the boroow quantity
             // checks for quantity to see if status can be changed to returned
             // book.Quantity = Convert.ToInt32(quantity);
-            SelectedBorrow.Returned = FullReturn();
+            SelectedBorrow.Returned = "YES";
             DatabaseManager.UpdateBorrow(SelectedBorrow);
 
             // display alert for update success
@@ -190,21 +160,5 @@
             await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
         }
     }
-    /// <summary>
-    /// Returns all quantities of selected borrowed book from customer selected
-    /// </summary>
-    /// <returns>Sets amount borrowed to 0, and status to "YES"</returns>
-    /// <exception cref="Exception">If the amount borrowed is 0 it will notify that it has already been returned</exception>
-    private string FullReturn()
-    {
-        if(SelectedBorrow.Quantity != 0)
-        {
-            SelectedBorrow.Quantity = 0;
-            return SelectedBorrow.Returned = "YES";
-        }
-        else
-        {
-            throw new Exception("But has already been returned");
-        }
-    }
+  
 }
