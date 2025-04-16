@@ -79,8 +79,8 @@
 @code {
     string customerID = "";
 
-    List<Book> bookList = DatabaseManager.GetAllBooks(); // get the list of books to display to the user so they can borrow
-    List<BorrowBooks> borrowingList = new List<BorrowBooks>(); // once user clicks borrow, create the borrow book object and add to the list
+    List<Book> bookList = BookManager.Books; // get the list of books to display to the user so they can borrow
+                                     
     BorrowBook bookForBorrowing = new BorrowBook();
 
     // Intialize variables to be used 
