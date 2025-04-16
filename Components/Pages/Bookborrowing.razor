@@ -77,7 +77,8 @@
 
 @code {
     // Intialize variables to be used
-    string customerID;
+    [Inject] NavigationManager NavigationManager { get; set; }
+    string customerID = "";
     string customerName;
     string selectedBookID;
     string author;
@@ -130,8 +131,16 @@
         try
         {
             BorrowManager.AddBorrow(customerID, selectedBookID, CheckQuantity());
+            customerID = null;
+            customerName = null;
+            selectedBookID = null;
+            author = null;
+            genre = null;
+            availableQuantity = 0;
+            borrowQuantity = null;
 
             await App.Current.MainPage.DisplayAlert($"Success", $"Book has been borrowed", "OK");
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception ex)
         {
