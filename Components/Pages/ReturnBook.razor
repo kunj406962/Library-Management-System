@@ -76,7 +76,7 @@
 </div>
 
 @code {
-    //navigates back to books page 
+    //navigates back to books page after returning books
     [Inject] NavigationManager NavigationManager { get; set; }
     string customerID = "";
     string selectedBorrowId = "";
@@ -96,12 +96,21 @@
             name = customer.FirstName + " " + customer.LastName;
         }
     }
-
+    /// <summary>
+    /// searches the database for books borrowed depending on customer
+    /// </summary>
+    /// <param name="customerID">Uses customer Id for returned books</param>
     private void SearchBorrows(string customerID)
     {
         borrowsFound = DatabaseManager.GetAllBorrowsBasedOnCustomerID(customerID); 
     }
-
+    /// <summary>
+    /// Checks for input of quantity
+    /// To validate if it's a real or valid amount to put
+    /// quantity depends on selected customer book
+    /// </summary>
+    /// <returns>Returns appropiate exceptions or updates the borrow table in the database</returns>
+    /// <exception cref="Exception"></exception>
     private int CheckQuantity()
     {
         int intQuantity;
@@ -127,7 +136,7 @@
 
     }
     /// <summary>
-    /// Updates the value of the selected borrowed book qunaity
+    /// Updates the value of the selected borrowed book quntity
     /// If selected returned quantity is equal to the amount they borrowed
     /// then the status of returned turns to NO
     /// </summary>
@@ -153,9 +162,11 @@
         }
     }
     /// <summary>
-    /// 
+    /// Returns all quantity amount to 0
+    /// and updates the returned status to "YES"
+    /// Alternative to inputting a selected amount of books you want to return
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Updates Database for quantity and status for selected customer</returns>
     private async Task ReturnAll()
     {
         try
@@ -177,7 +188,11 @@
             await App.Current.MainPage.DisplayAlert($"Error", $"{ex.Message}", "OK");
         }
     }
-
+    /// <summary>
+    /// Returns all quantities of selected borrowed book from customer selected
+    /// </summary>
+    /// <returns>Sets amount borrowed to 0, and status to "YES"</returns>
+    /// <exception cref="Exception">If the amount borrowed is 0 it will notify that it has already been returned</exception>
     private string FullReturn()
     {
         if(SelectedBorrow.Quantity != 0)
