@@ -32,4 +32,5 @@ INSERT INTO borrow (BorrowId, CustomerId, BookId, Quantity, Returned) VALUES
 ('BR2', 'C2', 'B3', 1, 'YES'),
 ('BR3', 'C3', 'B2', 2, 'NO'),
 ('BR4', 'C4', 'B5', 1, 'NO'),
-('BR5', 'C5', 'B4', 1, 'YES');
+('BR5', 'C5', 'B4', 1, 'YES'),
+('BR6', 'C1', 'B5', 12, 'NO');
