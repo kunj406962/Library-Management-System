@@ -346,7 +346,7 @@ namespace CPRG211FinalProject.Classes
         public static void UpdateBorrow(BorrowBooks borrow)
         {
             connection.Open();
-            string sqlQuery = $"UPDATE borrow SET CustomerId='{borrow.CustomerId}',BookId='{borrow.BookId}', Quantity={borrow.Quantity}, Quantity={borrow.Quantity}, Returned = {borrow.Returned} WHERE BorrowId='{borrow.BorrowId}'";
+            string sqlQuery = $"UPDATE borrow SET CustomerId='{borrow.CustomerId}',BookId='{borrow.BookId}', Quantity={borrow.Quantity}, Returned = '{borrow.Returned}' WHERE BorrowId='{borrow.BorrowId}'";
             MySqlCommand command = new MySqlCommand(sqlQuery, connection);
             int execute = command.ExecuteNonQuery();
             connection.Close();
