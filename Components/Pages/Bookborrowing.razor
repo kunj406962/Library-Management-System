@@ -103,6 +103,9 @@
     BorrowBooks bookForBorrowing = new BorrowBooks();
     Customer borrowCustomer;
 
+    /// <summary>
+    /// Instantiating the book to access its attributes
+    /// </summary>
     private void OnChange()
     {
         borrowBook = DatabaseManager.GetBook(selectedBookID);
@@ -138,6 +141,10 @@
 
     }
 
+    /// <summary>
+    /// Checking the input for the customer id and bookID before calling the method of the button
+    /// </summary>
+    /// <exception cref="Exception"></exception>
     private void CheckID()
     {
         if (String.IsNullOrEmpty(customerID))

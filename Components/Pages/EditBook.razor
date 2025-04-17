@@ -1,31 +1,48 @@
 ﻿@page "/editbook/{BookId}"
 
-<h1>Edit the Book: @book.BookId</h1>
+<div class="container-fluid py-4">
+	<div class="card shadow-sm">
+		<div class="card-header bg-light d-flex justify-content-between align-items-center">
+			<h2 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Book: @book.BookId</h2>
+			<NavLink class="btn btn-outline-secondary" href="/books">
+				<i class="bi bi-arrow-left me-1"></i>Back to Books
+			</NavLink>
+		</div>
 
-<div>
-	<div class="form-group">
-		<label>Book Title: </label>
-		<input type="text" class="form-control" placeholder="Update Title" @bind="book.Title" />
-	</div>
+		<div class="card-body">
+			<div class="row justify-content-center">
+				<div class="col-md-8 col-lg-6">
+					<form>
+						<div class="mb-3">
+							<label class="form-label fw-bold">Book Title</label>
+							<input type="text" class="form-control" placeholder="Update Title" @bind="book.Title" />
+						</div>
 
-	<div class="form-group">
-		<label>Author: </label>
-		<input type="text" class="form-control" placeholder="Update Author" @bind="book.Author" />
-	</div>
+						<div class="mb-3">
+							<label class="form-label fw-bold">Author</label>
+							<input type="text" class="form-control" placeholder="Update Author" @bind="book.Author" />
+						</div>
 
-	<div class="form-group">
-		<label>Genre: </label>
-		<input type="text" class="form-control" placeholder="Update Genre" @bind="book.Genre" />
-	</div>
+						<div class="mb-3">
+							<label class="form-label fw-bold">Genre</label>
+							<input type="text" class="form-control" placeholder="Update Genre" @bind="book.Genre" />
+						</div>
 
-	<div class="form-group">
-		<label>Quantity: </label>
-		<input type="text" class="form-control" placeholder="Update Quantity: must be number" @bind="quantity">
-	</div>
-	<div class="form-group">
-		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="UpdateBook">Update Book Details</button>
-	</div>
+						<div class="mb-4">
+							<label class="form-label fw-bold">Quantity</label>
+							<input type="text" class="form-control" placeholder="Update Quantity (must be number)" @bind="book.Quantity">
+						</div>
 
+						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+							<button type="submit" class="btn btn-warning text-white" @onclick="UpdateBook">
+								<i class="bi bi-save me-1"></i>Update Book Details
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 

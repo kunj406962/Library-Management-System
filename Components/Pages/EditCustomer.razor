@@ -1,33 +1,48 @@
 ﻿@page "/editcustomer/{CustomerID}"
 
-<h1>Edit Customer: @customer.CustomerID</h1>
+<div class="container-fluid py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h2 class="mb-0"><i class="bi bi-person-gear me-2"></i>Edit Customer: @customer.CustomerID</h2>
+            <NavLink class="btn btn-outline-secondary" href="/customers">
+                <i class="bi bi-arrow-left me-1"></i>Back to Customers
+            </NavLink>
+        </div>
 
-<div>
-	<div class="form-group">
-		<label>First Name: </label>
-		<input type="text" class="form-control" placeholder="Update First Name" @bind="customer.FirstName" />
-	</div>
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">First Name</label>
+                            <input type="text" class="form-control" placeholder="Update First Name" @bind="customer.FirstName" />
+                        </div>
 
-	<div class="form-group">
-		<label>Last Name: </label>
-		<input type="text" class="form-control" placeholder="Update Last Name" @bind="customer.LastName" />
-	</div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Update Last Name" @bind="customer.LastName" />
+                        </div>
 
-	<div class="form-group">
-		<label>Email: </label>
-		<input type="text" class="form-control" placeholder="Update Email" @bind="customer.Email" />
-	</div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" placeholder="Update Email" @bind="customer.Email" />
+                        </div>
 
-	<div class="form-group">
-		<label>Phone Number: </label>
-		<input type="text" class="form-control" placeholder="Update Phone Number" @bind="phone" />
-	</div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Phone Number</label>
+                            <input type="tel" class="form-control" placeholder="Update Phone Number" @bind="customer.Phone" />
+                        </div>
 
-
-	<div class="form-group">
-		<button type="submit" class="btn btn-primary my-3 text-start" @onclick="() => UpdateCustomer(customer)">Update Customer Details</button>
-	</div>
-
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-warning text-white" @onclick="() => UpdateCustomer(customer)">
+                                <i class="bi bi-save-fill me-1"></i>Update Customer Details
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
