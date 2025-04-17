@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CPRG211FinalProject.Classes.Book">
+    <Position X="2.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAEAAgAIAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Classes\Book.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.Customer">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAAAAAAAAAAAAAEAAAAAAAAAAAIAAAAAg=</HashCode>
+      <FileName>Classes\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.BorrowBooks">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAACAAAAgAAAAAAAAAAABAAAAAAgAAAAAA=</HashCode>
+      <FileName>Classes\BorrowBooks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.BorrowManager">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAgAAAIAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Classes\BorrowManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.BookManager">
+    <Position X="2.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Classes\BookManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.CustomerManager">
+    <Position X="4.75" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAABAAAgAAAAAAAAAAAAAAAAQAAAAABABAAAAAA=</HashCode>
+      <FileName>Classes\CustomerManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPRG211FinalProject.Classes.DatabaseManager">
+    <Position X="9.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BFBAAEAAAQAAgQAAhCABAABAACQIAAAAIAAAAAABAAA=</HashCode>
+      <FileName>Classes\DatabaseManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
