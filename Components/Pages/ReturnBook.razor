@@ -1,76 +1,85 @@
 ﻿@page "/returnbook"
 @using CPRG211FinalProject.Classes
 
-<h4 class="my-2">Return Book</h4>
+<div class="container-fluid py-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">Return Books</h4>
+        </div>
+        <div class="card-body">
+            <!-- Search Section -->
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Customer ID:</label>
+                    <input class="form-control" type="text" placeholder="Enter customer ID" @bind="customerID" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button class="btn btn-primary w-100" @onclick="SearchBorrows">
+                        <i class="bi bi-search me-1"></i> Find Data
+                    </button>
+                </div>
+            </div>
 
-<div class="d-flex flex-nowrap  gap-4">
+            <!-- Items Selection -->
+            <div class="mb-4">
+                <h5 class="mb-3">Borrowed Items</h5>
+                @if (borrowsFound.Count == 0)
+                {
+                    <div class="alert alert-info">Loading borrowed items...</div>
+                }
+                else
+                {
+                    <select class="form-select" @bind="selectedBorrowId">
+                        <option value="" selected disabled>Please select a borrowed item...</option>
+                        @foreach (BorrowBooks b in borrowsFound)
+                        {
+                            <option value="@b.BorrowId">@DatabaseManager.GetBook(b.BookId).Title</option>
+                        }
+                    </select>
+                    @if (!String.IsNullOrEmpty(selectedBorrowId))
+                    {
+                        OnChange();
+                    }
+                }
+            </div>
 
-    <div class="w-25">
-        <label>Customer ID:</label>
-        <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
-    </div>
-
-    <div class="w-25">
-        <label></label>
-        <button class="btn btn-primary w-100" @onclick="SearchBorrows">Find Data</button>
-    </div>
-
-</div>
-
-<div class="flights-found-field">
-    <h4 class="mt-5 mb-2">Items</h4>
-    @if (borrowsFound.Count == 0)
-    {
-        <select class="formatted-field form-control" @bind="selectedBorrowId">
-            <option value="" selected disabled>Loading...</option>
-        </select>
-    }
-    else
-    {
-        <select class="formatted-field form-control" @bind="selectedBorrowId">
-            <option value="" selected disabled>Please select items...</option>
-            @foreach (BorrowBooks b in borrowsFound)
-            {
-                <option value=@b.BorrowId>@DatabaseManager.GetBook(b.BookId).Title</option>
-            }
-        </select>
-        if (!String.IsNullOrEmpty(selectedBorrowId))
-        {
-            OnChange();
-        }
-    }
-</div>
-
-
-<h4 class="mt-5 mb-0">View Data</h4>
-<div class="reservation-container">
-    <div class="form-group">
-        <label>Borrow ID:</label>
-        <input type="text" class="form-control" placeholder="BorrowID" @bind="SelectedBorrow.BorrowId"  readonly>
-    </div>
-
-    <div class="form-group">
-        <label>Customer Name:</label>
-        <input type="text" class="form-control" placeholder="CustomerName" @bind="name" readonly>
-    </div>
-
-    <div class="form-group">
-        <label>Book ID:</label>
-        <input type="text" class="form-control" placeholder="BookID" @bind="SelectedBorrow.BookId" readonly>
-    </div>
-
-    <div class="form-group">
-        <label>Book Name:</label>
-        <input type="text" class="form-control" placeholder="Book Name" @bind="title" readonly>
-    </div>
-
-    <div class="form-group">
-        <label>Quantity Borrowed:</label>
-        <input type="text" class="form-control" placeholder="Quantity Borrowed" @bind="SelectedBorrow.Quantity" readonly>
-    </div>
-
-    <div class="form-group mt-2">
-        <button class="btn btn-outline-secondary" type="button" @onclick="Return">Return</button>
+            <!-- Details Section -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Borrow Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Borrow ID:</label>
+                            <input type="text" class="form-control" placeholder="BorrowID" @bind="SelectedBorrow.BorrowId" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Customer Name:</label>
+                            <input type="text" class="form-control" placeholder="CustomerName" @bind="name" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Book ID:</label>
+                            <input type="text" class="form-control" placeholder="BookID" @bind="SelectedBorrow.BookId" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Book Name:</label>
+                            <input type="text" class="form-control" placeholder="Book Name" @bind="title" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Quantity Borrowed:</label>
+                            <input type="text" class="form-control" placeholder="Quantity Borrowed" @bind="SelectedBorrow.Quantity" readonly>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="btn btn-danger" type="button" @onclick="Return">
+                                <i class="bi bi-arrow-return-left me-1"></i> Return Book
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
