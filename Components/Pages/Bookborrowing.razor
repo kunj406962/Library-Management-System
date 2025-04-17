@@ -1,77 +1,89 @@
 ﻿@page "/bookborrowing"
 @using CPRG211FinalProject.Classes
 
-<div class="container-fluid">
-    <h4 class="my-2">Borrow Book</h4>
-
-    <div class="d-flex flex-nowrap  gap-4"> 
-
-        <div class="w-25"> 
-            <label>Customer ID:</label> 
-            <input class="form-control" type="text" placeholder="Any" @bind="customerID" />
-            <button class="btn btn-outline-secondary" type="button" @onclick="SearchCustomer">Find Customer</button>
+<div class="container-fluid py-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">Borrow Book</h4>
         </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Customer ID:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Enter customer ID" @bind="customerID" />
+                        <button class="btn btn-primary" type="button" @onclick="SearchCustomer">
+                            <i class="bi bi-search me-1"></i> Find Customer
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-    </div>
-
-    <h4 class="mt-5 mb-2">Choose a Book to Borrow</h4>
-    @if (bookList.Count == 0)
-    {
-        <span class="formatted-field form-control">Loading..</span>
-    }
-    else
-    {
-        <select class="formatted-field form-control" @bind="selectedBookID">
-            <option value="" selected disabled>Please select the book...</option>
-            @foreach (Book book in bookList)
+            <h5 class="mb-3">Choose a Book to Borrow</h5>
+            @if (bookList.Count == 0)
             {
-                <option value=@book.BookId>@DatabaseManager.GetBook(book.BookId).Title</option>
+                <div class="alert alert-info">Loading books...</div>
             }
-        </select>
-        if (!String.IsNullOrEmpty(selectedBookID))
-        {
-            OnChange();
-        }
-    }
+            else
+            {
+                <div class="mb-4">
+                    <select class="form-select" @bind="selectedBookID">
+                        <option value="" selected disabled>Please select a book...</option>
+                        @foreach (Book book in bookList)
+                        {
+                            <option value="@book.BookId">@DatabaseManager.GetBook(book.BookId).Title</option>
+                        }
+                    </select>
+                    @if (!String.IsNullOrEmpty(selectedBookID))
+                    {
+                        OnChange();
+                    }
+                </div>
+            }
 
-
-    <h4 class="mt-5 mb-0"></h4>
-    <div class="reservation-container">
-        <div class="form-group">
-            <label>Customer ID</label>
-            <input type="text" class="form-control" placeholder="Customer ID" @bind="customerID" readonly>
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Borrowing Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Customer ID</label>
+                            <input type="text" class="form-control" placeholder="Customer ID" @bind="customerID" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" placeholder="Customer Name" @bind="customerName" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Book ID</label>
+                            <input type="text" class="form-control" placeholder="Book ID" @bind="selectedBookID" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Author</label>
+                            <input type="text" class="form-control" placeholder="Author Name" @bind="author" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Genre</label>
+                            <input type="text" class="form-control" placeholder="Genre" @bind="genre" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Available Quantity</label>
+                            <input type="text" class="form-control" placeholder="Available Quantity" @bind="availableQuantity" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Quantity to Borrow</label>
+                            <input type="text" class="form-control" placeholder="Borrow Quantity" @bind="borrowQuantity">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button class="btn btn-primary" type="button" @onclick="Borrow">
+                                <i class="bi bi-book me-1"></i> Borrow Book
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Customer Name</label>
-            <input type="text" class="form-control" placeholder="Customer Name" @bind="customerName" readonly>
-        </div>
-
-        <div class="form-group">
-            <label>Book ID</label>
-            <input type="text" class="form-control" placeholder="Book ID" @bind="selectedBookID" readonly>
-        </div>
-        <div class="form-group">
-            <label>Author</label>
-            <input type="text" class="form-control" placeholder="Author Name" @bind="author" readonly>
-        </div>
-
-        <div class="form-group">
-            <label>Genre</label>
-            <input type="text" class="form-control" placeholder="Genre" @bind="genre" readonly>
-        </div>
-        <div class="form-group">
-            <label>Available Quantity</label>
-            <input type="text" class="form-control" placeholder=" Available Quantity" @bind="availableQuantity" readonly>
-        </div>
-        <div class="form-group">
-            <label>Quantity to Borrow</label>
-            <input type="text" class="form-control" placeholder=" Borrow Quantity" @bind="borrowQuantity">
-        </div>
-
-        <div class="form-group" >
-            <button class="btn btn-outline-secondary" type="button" @onclick="Borrow">borrow</button>
-        </div>
-
     </div>
 </div>
 
@@ -91,6 +103,9 @@
     BorrowBooks bookForBorrowing = new BorrowBooks();
     Customer borrowCustomer;
 
+    /// <summary>
+    /// Instantiating the book to access its attributes
+    /// </summary>
     private void OnChange()
     {
         borrowBook = DatabaseManager.GetBook(selectedBookID);
@@ -126,6 +141,10 @@
 
     }
 
+    /// <summary>
+    /// Checking the input for the customer id and bookID before calling the method of the button
+    /// </summary>
+    /// <exception cref="Exception"></exception>
     private void CheckID()
     {
         if (String.IsNullOrEmpty(customerID))

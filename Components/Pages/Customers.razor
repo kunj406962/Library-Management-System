@@ -1,38 +1,75 @@
 ﻿@page "/customers"
 
-<header class="d-flex justify-content-between my-4">
-    <h1>Customer Management</h1>
-    <div class="m-x-0">
-        <NavLink class="btn btn-primary" href="addcustomer">Add new customer</NavLink>
-    </div>
-</header>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Customer customer in customers)
+<div class="container-fluid py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h2 class="mb-0"><i class="bi bi-people me-2"></i>Customer Management</h2>
+            <NavLink class="btn btn-success" href="addcustomer">
+                <i class="bi bi-person-plus me-1"></i>Add New Customer
+            </NavLink>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="8%">ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th width="20%" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (customers.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <div class="alert alert-info mb-0">No customers found</div>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (Customer customer in customers)
+                            {
+                                <tr>
+                                    <td>@customer.CustomerID</td>
+                                    <td>@customer.FirstName</td>
+                                    <td>@customer.LastName</td>
+                                    <td>@customer.Email</td>
+                                    <td>@customer.Phone</td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <!-- Edit Button -->
+                                            <button class="btn btn-warning text-white px-3" @onclick="() => GoToEditCustomer(customer)">
+                                                <i class="bi bi-pencil-fill me-1"></i>Edit
+                                            </button>
+
+                                            <!-- Delete Button -->
+                                            <button class="btn btn-danger px-3" @onclick="() => DeleteCustomer(customer)">
+                                                <i class="bi bi-trash-fill me-1"></i>Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (customers.Count > 0)
         {
-            <tr>
-                <td>@customer.CustomerID</td>
-                <td>@customer.FirstName</td>
-                <td>@customer.LastName</td>
-                <td>@customer.Email</td>
-                <td>@customer.Phone</td>
-                <td class="text-center">
-                    <button class="btn btn-warning" @onclick="() => GoToEditCustomer(customer)">Edit</button>
-                    <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Delete</button>
-                </td>
-            </tr>
+            <div class="card-footer bg-light">
+                <small class="text-muted">Showing @customers.Count customer(s)</small>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>
 
 @code {
     [Inject] NavigationManager NavigationManager { get; set; }
