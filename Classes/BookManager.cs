@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    public  static class BookManager
+    public class BookManager:IManagercs<Book>
     {
         public static List<Book> Books= DatabaseManager.GetAllBooks();
 
@@ -51,10 +51,10 @@ namespace CPRG211FinalProject.Classes
         /// Updates a book object both in the list and the database
         /// </summary>
         /// <param name="book">Book object with same Id </param>
-        public static void UpdateBook(Book book) 
+        public static void Update(Book book)
         {
-           foreach(Book book1 in Books) 
-           {
+            foreach (Book book1 in Books)
+            {
                 if (book1.BookId == book.BookId)
                 {
                     book1.Title = book.Title;
@@ -64,19 +64,17 @@ namespace CPRG211FinalProject.Classes
                     DatabaseManager.UpdateBook(book);
                     return;
                 }
-           }
+            }
         }
 
         /// <summary>
         /// Deletse book from both the list and the database
         /// </summary>
         /// <param name="book"></param>
-        public static void DeleteBook(Book book) 
+        public static void Delete(Book book)
         {
             Books.Remove(book);
             DatabaseManager.DeleteBook(book.BookId);
         }
-
-       
     }
 }

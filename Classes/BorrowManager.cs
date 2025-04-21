@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CPRG211FinalProject.Classes
 {
-    public static class BorrowManager
+    public class BorrowManager : IManagercs<BorrowBooks>
     {
         public static List<BorrowBooks> BorrowBooks = DatabaseManager.GetAllBorrow();
         /// <summary>
@@ -91,6 +91,36 @@ namespace CPRG211FinalProject.Classes
                 }
             }
             return onlyNotReturned;
+        }
+
+        /// <summary>
+        /// Updates a book object both in the list and the database
+        /// </summary>
+        /// <param name="book">Book object with same Id </param>
+        public static void Update(BorrowBooks borrow)
+        {
+            foreach (BorrowBooks borrow1 in BorrowBooks)
+            {
+                if (borrow1.BorrowId == borrow.BorrowId)
+                {
+                    borrow1.BookId = borrow.BookId;
+                    borrow1.CustomerId = borrow.CustomerId;
+                    borrow1.Returned =borrow1.Returned;
+                    borrow1.Quantity = borrow1.Quantity;
+                    DatabaseManager.UpdateBorrow(borrow);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletse book from both the list and the database
+        /// </summary>
+        /// <param name="book"></param>
+        public static void Delete(BorrowBooks book)
+        {
+            BorrowBooks.Remove(book);
+            DatabaseManager.DeleteBorrow(book.BookId);
         }
     }
 }

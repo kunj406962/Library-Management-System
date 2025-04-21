@@ -30,7 +30,7 @@
 
 						<div class="mb-4">
 							<label class="form-label fw-bold">Quantity</label>
-							<input type="text" class="form-control" placeholder="Update Quantity (must be number)" @bind="book.Quantity">
+							<input type="text" class="form-control" placeholder="Update Quantity (must be number)" @bind="quantity">
 						</div>
 
 						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -107,7 +107,7 @@
 			// book.Genre = genre;
 			// book.Quantity = Convert.ToInt32(quantity);
 			book.Quantity = CheckQuantity();
-			BookManager.UpdateBook(book);
+			BookManager.Update(book);
 
 			// display alert for update success
 			await App.Current.MainPage.DisplayAlert($"Success", $"Book information has been updated", "OK");
