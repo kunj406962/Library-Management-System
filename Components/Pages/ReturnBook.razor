@@ -152,7 +152,7 @@
             DatabaseManager.UpdateBook(book);
 
             // updates the value of the borrow quantity
-            DatabaseManager.UpdateBorrow(SelectedBorrow);
+            BorrowManager.Update(SelectedBorrow);
 
             // display alert for update success
             await App.Current.MainPage.DisplayAlert($"Success", $"Your book has been returned", "OK");
