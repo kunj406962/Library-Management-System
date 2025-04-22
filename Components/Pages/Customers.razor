@@ -1,4 +1,4 @@
-﻿@page "/customers"
+﻿﻿@page "/customers"
 
 <header class="d-flex justify-content-between my-4">
     <h1>Customer Management</h1>
@@ -26,7 +26,7 @@
                 <td>@customer.Email</td>
                 <td>@customer.Phone</td>
                 <td class="text-center">
-                    <button class="btn btn-warning" @onclick="GoToEditCustomer">Edit</button>
+                    <button class="btn btn-warning" @onclick="() => GoToEditCustomer(customer)">Edit</button>
                     <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer)">Delete</button>
                 </td>
             </tr>
@@ -38,9 +38,9 @@
     [Inject] NavigationManager NavigationManager { get; set; }
     List<Customer> customers = DatabaseManager.GetAllCustomers();
 
-    private void GoToEditCustomer()
+    private void GoToEditCustomer(Customer cus)
     {
-        NavigationManager.NavigateTo("/editcustomer");
+        NavigationManager.NavigateTo($"/editcustomer/{cus.CustomerID}");
     }
 
     private void DeleteCustomer(Customer c)
