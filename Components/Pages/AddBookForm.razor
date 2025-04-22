@@ -90,11 +90,11 @@
 		try
 		{
 			BookManager.CreateBook(title, author, genre, CheckQuantity());
+			await App.Current.MainPage.DisplayAlert($"Success", $"Book Added to System", "OK");
 			title = null;
 			author = null;
 			genre = null;
 			quantity = null;
-			await App.Current.MainPage.DisplayAlert($"Success", $"Book Added to System", "OK");
 			NavigationManager.NavigateTo("/books");
 		}
 		catch(Exception ex)
