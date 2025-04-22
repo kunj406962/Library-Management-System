@@ -63,109 +63,17 @@ namespace CPRG211FinalProject.Classes
         }
 
         /// <summary>
-        /// Gets all books
+        /// Gets all customers from the database.
         /// </summary>
-        /// <returns></returns>
-        public static List<Book> GetAllBooks() 
-        {
-            List<Book> list = new List<Book>();
-            string query = "SELECT * FROM book;";
-            MySqlCommand cmd = new MySqlCommand(query,connection);
-            connection.Open();
-            using (MySqlDataReader reader = cmd.ExecuteReader()) 
-            {
-                while (reader.Read()) 
-                {
-                    Book book = new Book();
-                    book.BookId = reader.GetString(0);
-                    book.Title = reader.GetString(1);
-                    book.Genre = reader.GetString(2);
-                    book.Author = reader.GetString(3);
-                    book.Quantity = reader.GetInt32(4);
-                    list.Add(book);
-                }
-            }
-            connection.Close() ;
-            return list;
-        }
-
-        /// <summary>
-        /// Implement the AddBook method to add a book to the database
-        /// </summary>
-        /// <param name="book"></param>
-        public static void AddBook(Book book)
-        {
-            connection.Open();
-            string insertSql = "INSERT INTO book (BookId, Title, Author, Genre, Quantity) VALUES" +
-                              $"('{book.BookId}','{book.Title}','{book.Author}','{book.Genre}',{book.Quantity});";
-            MySqlCommand cmd = new MySqlCommand(insertSql, connection);
-            int execute = cmd.ExecuteNonQuery();
-            connection.Close();
-
-        }
-
-        /// <summary>
-        /// Implement the UpdateBook method to update a book in the database
-        /// </summary>
-        /// <param name="book"></param>
-        public static void UpdateBook(Book book)
-        {
-            connection.Open();
-            string sqlQuery = $"UPDATE book SET Title='{book.Title}',Author='{book.Author}', Genre='{book.Genre}', Quantity='{book.Quantity}' WHERE BookId='{book.BookId}'";
-            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
-            int execute = command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        /// <summary>
-        /// Implement the GetBook method to get a book from the database
-        /// </summary>
-        /// <param name="bookId"></param>
-        /// <returns></returns>
-        public static Book GetBook(string bookId)
-        {
-            string sqlQuery = $"SELECT * FROM book WHERE BOOKID='{bookId}'";
-            Book book = new Book();
-            MySqlCommand read = new MySqlCommand(sqlQuery, connection);
-            connection.Open();
-            using (MySqlDataReader reader = read.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    book.BookId = reader.GetString(0);
-                    book.Title = reader.GetString(1);
-                    book.Genre = reader.GetString(2);
-                    book.Author = reader.GetString(3);
-                    book.Quantity = reader.GetInt32(4);
-                }
-            }
-            connection.Close();
-            return book;
-
-        }
-
-
-        /// <summary>
-        /// Implement the DeleteBook method to delete a book from the database
-        /// </summary>
-        /// <param name="bookId"></param>
-        public static void DeleteBook(string bookId)
-        {
-            connection.Open();
-            string sqlQuery = $"DELETE FROM book WHERE BookId='{bookId}'";
-            MySqlCommand command = new MySqlCommand(sqlQuery, connection);
-            int execute = command.ExecuteNonQuery();
-            connection.Close();
-        }
-
+        /// <returns>List of Customer objects</returns>
         public static List<Customer> GetAllCustomers()
         {
             connection.Open();
             List<Customer> customers = new List<Customer>();
             string sql = "select * from customer;";
 
-            MySqlCommand command = new MySqlCommand(sql,connection);
-            using(MySqlDataReader reader = command.ExecuteReader())
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -184,13 +92,18 @@ namespace CPRG211FinalProject.Classes
             return customers;
         }
 
+        /// <summary>
+        /// Retrieves a customer from the database using the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the customer</param>
+        /// <returns>A Customer object</returns>
         public static Customer GetCustomer(string id)
         {
             connection.Open();
             Customer customer = new Customer();
-            string sql = $"select * from customer where customer_id = '{id}'; ";
-            MySqlCommand command = new MySqlCommand(sql,connection);
-            using( MySqlDataReader reader = command.ExecuteReader())
+            string sql = $"select * from customer where customerid = '{id}'; ";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -208,22 +121,43 @@ namespace CPRG211FinalProject.Classes
             return customer;
         }
 
+        /// <summary>
+        /// Adds a new customer to the database.
+        /// </summary>
+        /// <param name="customer">The Customer object to add</param>
         public static void AddCustomer(Customer customer)
         {
             connection.Open();
             string sql = $"insert into customer values ( '{customer.CustomerID}', '{customer.FirstName}', '{customer.LastName}', '{customer.Email}', '{customer.Phone}' ); ";
-            MySqlCommand command = new MySqlCommand( sql,connection);
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        public static void DeleteCustomer(string id)
-        {
-            connection.Open();
-            string sql = $"delete from customer where customerId = '{id}' ;";
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
+
+        /// <summary>
+        /// Deletes a customer and their associated borrow records from the database.
+        /// </summary>
+        /// <param name="id">The ID of the customer to delete</param>
+        public static void DeleteCustomer(string id)
+        {
+            connection.Open();
+            string sql = $"DELETE from borrow where customerID = '{id}'; " +
+                               $"DELETE from customer WHERE customerId = '{id}'";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            int execute = command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        /// <summary>
+        /// Updates a customer's information in the database.
+        /// </summary>
+        /// <param name="customer">The Customer object with updated information</param>
+        public static void UpdateCustomer(Customer customer)
+        {
+            connection.Open();
+            string sql = $"UPDATE customer SET FirstName = '{customer.FirstName}', LastName = '{customer.LastName}', Email = '{customer.Email}', Phone = '{customer.Phone}' WHERE CustomerId = '{customer.CustomerID}';";
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            int execute = command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
-}
