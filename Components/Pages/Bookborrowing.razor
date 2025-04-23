@@ -9,36 +9,50 @@
         <div class="card-body">
             <div class="row g-3 align-items-end mb-4">
                 <div class="col-md-4">
-                    <label class="form-label">Customer ID:</label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Enter customer ID" @bind="customerID" />
-                        <button class="btn btn-primary" type="button" @onclick="SearchCustomer">
-                            <i class="bi bi-search me-1"></i> Find Customer
-                        </button>
-                    </div>
+                    <h5 class="mb-3">Select Customer</h5>
+                    @if (customerList.Count == 0)
+                    {
+                            <div class="alert alert-info">Loading Customers...</div>
+                    }
+                    else
+                    {
+                            <div class="mb-4">
+                                <select class="form-select" @bind="selectedCustomerID">
+                                    <option value="" selected disabled>Please select a customer...</option>
+                                @foreach (Customer customer in customerList)
+                                {
+                                    <option value = "@customer.CustomerID">@DatabaseManager.GetCustomer(customer.CustomerID).ToString() </option>
+                                }
+                                </select>
+                            @if (!String.IsNullOrEmpty(selectedBookID))
+                            {
+                                OnChangeCustomer();
+                            }
+                            </div>
+                    }
                 </div>
             </div>
 
             <h5 class="mb-3">Choose a Book to Borrow</h5>
             @if (bookList.Count == 0)
             {
-                <div class="alert alert-info">Loading books...</div>
+                    <div class="alert alert-info">Loading books...</div>
             }
             else
             {
-                <div class="mb-4">
-                    <select class="form-select" @bind="selectedBookID">
-                        <option value="" selected disabled>Please select a book...</option>
+                    <div class="mb-4">
+                        <select class="form-select" @bind="selectedBookID">
+                            <option value="" selected disabled>Please select a book...</option>
                         @foreach (Book book in bookList)
                         {
                             <option value="@book.BookId">@DatabaseManager.GetBook(book.BookId).Title</option>
                         }
-                    </select>
+                        </select>
                     @if (!String.IsNullOrEmpty(selectedBookID))
                     {
                         OnChange();
                     }
-                </div>
+                    </div>
             }
 
             <div class="card">
@@ -49,11 +63,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Customer ID</label>
-                            <input type="text" class="form-control" placeholder="Customer ID" @bind="customerID" readonly>
+                            <input type="text" class="form-control" placeholder="Customer ID" @bind="selectedCustomerID" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Customer Name</label>
-                            <input type="text" class="form-control" placeholder="Customer Name" @bind="customerName" readonly>
+                            <input type="text" class="form-control" placeholder="Customer Name" @bind="selectedCustomerName" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Book ID</label>
@@ -90,9 +104,9 @@
 @code {
     // Intialize variables to be used
     [Inject] NavigationManager NavigationManager { get; set; }
-    string customerID = "";
-    string customerName;
-    string selectedBookID;
+    string selectedCustomerID; // for getting the customer for the dropdown in book borrowing
+    string selectedBookID; // for getting the books and showing in the dropdwon
+    string selectedCustomerName;
     string author;
     string genre;
     int availableQuantity;
@@ -102,6 +116,18 @@
     List<Book> bookList = BookManager.Books; // get the list of books to display to the user so they can borrow
     BorrowBooks bookForBorrowing = new BorrowBooks();
     Customer borrowCustomer;
+
+    List<Customer> customerList = DatabaseManager.GetAllCustomers(); // get the list of customers to display when borrowing the book
+
+    /// <summary>
+    /// Instantiating the customer to access attributes
+    /// </summary>
+    private void OnChangeCustomer()
+    {
+        borrowCustomer = DatabaseManager.GetCustomer(selectedCustomerID);
+        selectedCustomerID = borrowCustomer.CustomerID;
+        selectedCustomerName = $"{borrowCustomer.FirstName} {borrowCustomer.LastName}";
+    }
 
     /// <summary>
     /// Instantiating the book to access its attributes
@@ -124,7 +150,8 @@
                 if (intQuantity > availableQuantity)
                 {
                     throw new Exception($"Quantity must be less than or equal to available book count of {availableQuantity}");
-                } else
+                }
+                else
                 {
                     return intQuantity;
                 }
@@ -147,7 +174,7 @@
     /// <exception cref="Exception"></exception>
     private void CheckID()
     {
-        if (String.IsNullOrEmpty(customerID))
+        if (String.IsNullOrEmpty(selectedCustomerID))
         {
             throw new Exception("Enter Customer ID first!!");
         }
@@ -162,9 +189,9 @@
         try
         {
             CheckID();
-            BorrowManager.AddBorrow(customerID, selectedBookID, CheckQuantity());
-            customerID = null;
-            customerName = null;
+            BorrowManager.AddBorrow(selectedCustomerID, selectedBookID, CheckQuantity());
+            selectedCustomerID = null;
+            selectedCustomerName = null;
             selectedBookID = null;
             author = null;
             genre = null;
@@ -180,19 +207,8 @@
         }
     }
 
-    private async Task SearchCustomer()
-    {
-        borrowCustomer = null;
-        borrowCustomer = DatabaseManager.GetCustomer(customerID);
-        if (String.IsNullOrEmpty(borrowCustomer.CustomerID))
-        {
-            await App.Current.MainPage.DisplayAlert($"Important", $"Customer Id does not Exist", "OK");
-        } else // customer exists
-        {
-            customerID = borrowCustomer.CustomerID;
-            customerName = borrowCustomer.FirstName + " " + borrowCustomer.LastName;
-        }
-    }
-
+    // Hans Todo Notes
+    // 1. Change textbox search to dropdown list - in progress
+    // 2. add a filter list - not started 
 
 }

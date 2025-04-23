@@ -12,7 +12,7 @@ namespace CPRG211FinalProject.Classes
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Phone {  get; set; }
+        public string Phone { get; set; }
 
         /// <summary>
         /// Constructors for customer class 
@@ -28,6 +28,10 @@ namespace CPRG211FinalProject.Classes
         //    Email = email;
         //    Phone = phone;
         //}
-       
+        public override string ToString()
+        {
+            return $"{CustomerID} - {FirstName} {LastName}";
+        }
+
     }
 }
