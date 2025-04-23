@@ -17,14 +17,14 @@
                     else
                     {
                             <div class="mb-4">
-                                <select class="form-select" @bind="selectedCustomerID">
+                                <select class="form-select" @bind="selectedCustomerID" >
                                     <option value="" selected disabled>Please select a customer...</option>
                                 @foreach (Customer customer in customerList)
                                 {
                                     <option value = "@customer.CustomerID">@DatabaseManager.GetCustomer(customer.CustomerID).ToString() </option>
                                 }
                                 </select>
-                            @if (!String.IsNullOrEmpty(selectedBookID))
+                            @if (!String.IsNullOrEmpty(selectedCustomerID))
                             {
                                 OnChangeCustomer();
                             }
@@ -41,7 +41,7 @@
             else
             {
                     <div class="mb-4">
-                        <select class="form-select" @bind="selectedBookID">
+                        <select class="form-select" @bind="selectedBookID" >
                             <option value="" selected disabled>Please select a book...</option>
                         @foreach (Book book in bookList)
                         {
@@ -117,7 +117,7 @@
     BorrowBooks bookForBorrowing = new BorrowBooks();
     Customer borrowCustomer;
 
-    List<Customer> customerList = DatabaseManager.GetAllCustomers(); // get the list of customers to display when borrowing the book
+    List<Customer> customerList = DatabaseManager.GetAllCustomers().OrderBy(customer => customer.CustomerID.Length).ThenBy(customer => customer.CustomerID).ToList(); // get the list of customers to display when borrowing the book
 
     /// <summary>
     /// Instantiating the customer to access attributes
