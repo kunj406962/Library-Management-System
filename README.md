@@ -117,10 +117,25 @@ To run this application, ensure you have the following installed:
 - Alerts use `App.Current.MainPage.DisplayAlert` for user feedback.
 - The UI uses Bootstrap for responsive design and Bootstrap Icons for visuals.
 
-## Contributing
-To contribute:
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature-name`).
-3. Commit changes (`git commit -m "Add feature"`).
-4. Push to the branch (`git push origin feature-name`).
-5. Open a pull request.
+## Contribution
+1. Hans:
+- Bootstrap
+- BorrowBooks.razor, BorrowManager.cs
+- EditBook.razor
+- Output document
+2. Kunj:
+- Books.razor, BookManager.cs
+- AddBookForm.razor
+- Initially Detailed Documentaion of the Project: Database entities, Features, Methods needed for the application
+- Database Operation: created dababase and SQL script for creating tables, sample data for Customer, Book and BorrowBook
+- Help debugging the lists, created the interface, worked in Exception Handling
+3. Minh Tam:
+- Customer.razor, CustomerManager.cs
+- AddCustomerForm.razor
+- EditCustomer.razor
+- Created Class and ERD diagrams
+4. Enzo:
+- ReturnBook.razor
+- Added some code in customers page, return book page
+- Fixed bug in dbaccessor, added comments
+- Created Presentation slides
